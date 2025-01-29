@@ -1,0 +1,7 @@
+<h2>Logowanie</h2>
+<form method="post">
+    {% csrf_token %}
+    <input type="text" name="username" placeholder="Nazwa użytkownika" required>
+    <input type="password" name="password" placeholder="Hasło" required>
+    <button type="submit">Zaloguj się</button>
+</form>
