@@ -20,4 +20,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('products.urls')),  # Używamy routingów z aplikacji products
+    path('orders/', include('orders.urls')),  # Używamy routingów z aplikacji orders
 ]

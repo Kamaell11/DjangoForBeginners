@@ -1,0 +1,11 @@
+<h1>Szczegóły zamówienia</h1>
+<p>Produkt: {{ order.product.name }}</p>
+<p>Ilość: {{ order.quantity }}</p>
+<p>Status: {{ order.status }}</p>
+<p>Data zamówienia: {{ order.order_date }}</p>
+<a href="{% url 'order_edit' order.pk %}">Edytuj</a>
+<form method="post" action="{% url 'order_delete' order.pk %}">
+    {% csrf_token %}
+    <button type="submit">Usuń</button>
+</form>
+<a href="{% url 'order_list' %}">Powrót</a>

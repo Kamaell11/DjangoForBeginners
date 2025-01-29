@@ -1,0 +1,7 @@
+<h1>{% if order %}Edytuj{% else %}Dodaj{% endif %} zamówienie</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Zapisz</button>
+</form>
+<a href="{% url 'order_list' %}">Powrót</a>
