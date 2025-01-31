@@ -1,21 +1,24 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista produktów</title>
-</head>
-<body>
-    <h1>Lista produktów</h1>
-    <ul>
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Lista produktów</h1>
+    <div class="row">
         {% for product in products %}
-            <li>
-                <h2>{{ product.name }}</h2>
-                <p>{{ product.description }}</p>
-                <p>Cena: {{ product.price }} PLN</p>
-                <p>Stan: {{ product.stock }} sztuk</p>
-            </li>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow">
+                <div class="card-body">
+                    <h2 class="card-title">{{ product.name }}</h2>
+                    <p class="card-text">{{ product.description }}</p>
+                    <p class="card-text"><strong>Cena:</strong> {{ product.price }} PLN</p>
+                    <p class="card-text"><strong>Stan:</strong> {{ product.stock }} sztuk</p>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a href="{% url 'product_detail' product.id %}" class="btn btn-primary">Szczegóły</a>
+                </div>
+            </div>
+        </div>
         {% endfor %}
-    </ul>
-</body>
-</html>
+    </div>
+</div>
+{% endblock %}

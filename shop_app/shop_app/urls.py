@@ -17,9 +17,20 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from users.views import register_view, login_view, logout_view
+from products.views import product_list
+from users import views as user_views 
+
+from django.views.generic import TemplateView  # Zaimportuj TemplateView
+
 urlpatterns = [
+    path('', user_views.login_view, name='home'),  # Strona główna to teraz logowanie
     path('admin/', admin.site.urls),
-    path('', include('products.urls')),  # Używamy routingów z aplikacji products
-    path('orders/', include('orders.urls')),  # Używamy routingów z aplikacji orders
-    path('users/', include('users.urls')),  # Używamy routingów z aplikacji users
+    path('products/', include('products.urls')),  # Strona z produktami
+    path('users/', include('users.urls')),  # Strona z użytkownikami (logowanie, rejestracja)
+    
+    # Strony logowania i rejestracji
+    path('accounts/login/', user_views.login_view, name='login'),
+    path('accounts/logout/', user_views.logout_view, name='logout'),
+    path('accounts/register/', user_views.register_view, name='register'),
 ]

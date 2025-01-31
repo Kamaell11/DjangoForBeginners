@@ -1,5 +1,6 @@
-from django.db import models
+from django.conf import settings
 from products.models import Product
+from django.db import models
 
 class Order(models.Model):
     STATUS_CHOICES = [
@@ -8,7 +9,7 @@ class Order(models.Model):
         ('delivered', 'Dostarczone'),
         ('cancelled', 'Anulowane'),
     ]
-
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')

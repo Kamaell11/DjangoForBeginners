@@ -2,6 +2,10 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Product
 from .forms import ProductForm
 
+from django.contrib.auth.decorators import login_required
+
+
+@login_required
 def product_list(request):
     """Lista produktów"""
     products = Product.objects.all()

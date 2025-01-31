@@ -1,23 +1,22 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edytuj produkt: {{ product.name }}</title>
-    <!-- Tutaj możesz dodać style CSS, jeśli chcesz -->
-</head>
-<body>
-    <h1>Edytuj produkt: {{ product.name }}</h1>
+{% extends "base.html" %}
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
-    </form>
-
-    <form method="post" action="{% url 'product_delete' product.id %}">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger">Usuń produkt</button>
-    </form>
-</body>
-</html>
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Edytuj produkt: {{ product.name }}</h1>
+    <div class="card shadow">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
+                <a href="{% url 'product_detail' product.id %}" class="btn btn-secondary">Anuluj</a>
+            </form>
+            <hr>
+            <form method="post" action="{% url 'product_delete' product.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Usuń produkt</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
