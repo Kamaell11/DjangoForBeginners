@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 
-{% block title %}Logowanie{% endblock %}
 
 {% block content %}
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
@@ -38,11 +37,12 @@
             <div class="mb-3">
                 <label for="id_password" class="form-label fw-semibold">Hasło</label>
                 <div class="input-group">
-                    {{ form.password }}
+                    <input type="password" name="password" id="id_password" class="form-control">
                     <span class="input-group-text toggle-password" style="cursor:pointer;">
                         👁️
                     </span>
                 </div>
+                
                 {% if form.password.errors %}
                 <div class="text-danger small">
                     {% for error in form.password.errors %}
@@ -82,10 +82,8 @@
     .input-group input {
         width: 100%;
         box-sizing: border-box;
-        height: 50px;
-        padding: 10px;
-        margin: 5px 0;
     }
+
 
     .input-group-text.toggle-password {
         height: 100%;
@@ -102,27 +100,7 @@
         background-color: #e9ecef;
     }
 
-    .card {
-        padding: 20px;
-    }
 
-    .mb-3 {
-        margin-bottom: 1.5rem !important;
-    }
-
-    @media (max-width: 576px) {
-        .card {
-            max-width: 100%;
-            margin: 0 15px;
-        }
-    }
-
-    .btn-primary {
-        background-color: #0d6efd;
-        border: none;
-        padding: 10px;
-        font-size: 16px;
-    }
 
     .btn-primary:hover {
         background-color: #0b5ed7;

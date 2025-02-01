@@ -17,8 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from users.views import register_view, login_view, logout_view
-from products.views import product_list
+from django.conf import settings
+from django.conf.urls.static import static
 from users import views as user_views 
 
 from django.views.generic import TemplateView  # Zaimportuj TemplateView
@@ -33,4 +33,4 @@ urlpatterns = [
     path('accounts/login/', user_views.login_view, name='login'),
     path('accounts/logout/', user_views.logout_view, name='logout'),
     path('accounts/register/', user_views.register_view, name='register'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

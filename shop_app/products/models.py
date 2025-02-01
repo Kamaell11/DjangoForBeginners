@@ -7,7 +7,7 @@ class Product(models.Model):
     stock = models.IntegerField(default=0)  # Liczba sztuk na stanie
     created_at = models.DateTimeField(auto_now_add=True)  # Data dodania produktu
     updated_at = models.DateTimeField(auto_now=True)  # Data ostatniej aktualizacji produktu
-    
+    image = models.ImageField(upload_to='products/', blank=True, null=True)  # Zdjęcie produktu
 
     def __str__(self):
         return self.name  # Czytelna nazwa w panelu admina

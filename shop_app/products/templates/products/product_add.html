@@ -5,7 +5,7 @@
     <h1 class="mb-4">Dodaj nowy produkt</h1>
     <div class="card shadow">
         <div class="card-body">
-            <form method="post">
+            <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <button type="submit" class="btn btn-success">Dodaj produkt</button>
