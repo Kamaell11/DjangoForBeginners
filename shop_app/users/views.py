@@ -19,6 +19,9 @@ def register_view(request):
     return render(request, 'users/register.html', {'form': form})
 
 def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('product_list')  # Przekierowanie jeśli użytkownik już jest zalogowany
+
     if request.method == 'POST':
         form = LoginForm(request, data=request.POST)
         if form.is_valid():
@@ -27,9 +30,10 @@ def login_view(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('product_list')  
+                next_url = request.GET.get('next', 'product_list')  # Sprawdzenie czy jest przekierowanie
+                return redirect(next_url)
     else:
-        form = LoginForm(request)
+        form = LoginForm()
     return render(request, 'users/login.html', {'form': form})
 
 def logout_view(request):

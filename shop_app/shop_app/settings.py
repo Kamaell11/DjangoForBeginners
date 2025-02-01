@@ -29,7 +29,7 @@ ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'users.CustomUser' # Dodajemy nasz model użytkownika
 
-LOGIN_REDIRECT_URL = 'product-list'  # Po zalogowaniu idzie na listę produktów
+LOGIN_REDIRECT_URL = '/' # Po zalogowaniu idzie na listę produktów
 LOGOUT_REDIRECT_URL = 'login'  # Po wylogowaniu wraca na logowanie
 
 MEDIA_URL = '/media/'
