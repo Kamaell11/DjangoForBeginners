@@ -3,15 +3,19 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from .models import Product
 from .forms import ProductForm
+from orders.models import Order 
+
 
 def is_customer_or_admin(user):
     return user.is_authenticated and user.role in ["customer", "admin"]
 
 @login_required
 def product_list(request):
-    """Lista produktów"""
     products = Product.objects.all()
-    return render(request, 'products/product_list.html', {'products': products})
+    cart_count = 0
+    if request.user.is_authenticated:
+        cart_count = Order.objects.filter(user=request.user, status='pending').count()
+    return render(request, 'products/product_list.html', {'products': products, 'cart_count': cart_count})
 
 @login_required
 def product_detail(request, pk):

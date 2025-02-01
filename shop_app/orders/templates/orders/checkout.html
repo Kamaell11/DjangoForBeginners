@@ -1,0 +1,8 @@
+<h1>Twoje zamówienie</h1>
+<p>Wszystkie produkty znajdują się w Twoim koszyku. Proszę podać dane do wysyłki.</p>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}  <!-- Renderowanie formularza -->
+    <button type="submit" class="btn btn-primary">Zakończ zamówienie</button>
+</form>

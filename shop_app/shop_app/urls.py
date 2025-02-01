@@ -28,7 +28,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('products/', include('products.urls')),  # Strona z produktami
     path('users/', include('users.urls')),  # Strona z użytkownikami (logowanie, rejestracja)
-    
+    path('orders/', include('orders.urls')),  # Strona z zamówieniami
     # Strony logowania i rejestracji
     path('accounts/login/', user_views.login_view, name='login'),
     path('accounts/logout/', user_views.logout_view, name='logout'),

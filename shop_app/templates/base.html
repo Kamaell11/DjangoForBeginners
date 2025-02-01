@@ -58,6 +58,14 @@
                                       style="height: 100%; font-size: 18px;">Witaj, {{ user.username }}!</span>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link" href="{% url 'order_list' %}">
+                                    <i class="fas fa-shopping-cart"></i> Koszyk
+                                    {% if cart_count > 0 %}
+                                        <span class="badge badge-warning">{{ cart_count }}</span>
+                                    {% endif %}
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="btn btn-danger ms-3" href="{% url 'logout' %}">Wyloguj</a>
                             </li>
                         {% else %}

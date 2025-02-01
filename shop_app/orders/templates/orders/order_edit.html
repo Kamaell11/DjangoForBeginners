@@ -1,7 +1,15 @@
-<h1>{% if order %}Edytuj{% else %}Dodaj{% endif %} zamówienie</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Zapisz</button>
-</form>
-<a href="{% url 'order_list' %}">Powrót</a>
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="text-center">{% if order %}Edytuj{% else %}Dodaj{% endif %} zamówienie</h2>
+<div class="container">
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.as_p }}
+        </div>
+        <button type="submit" class="btn btn-primary">Zapisz</button>
+    </form>
+    <a href="{% url 'order_list' %}" class="btn btn-secondary mt-3">Powrót</a>
+</div>
+{% endblock %}

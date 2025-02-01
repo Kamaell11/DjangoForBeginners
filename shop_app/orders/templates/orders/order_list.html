@@ -1,9 +1,32 @@
-<h1>Lista zamówień</h1>
-<ul>
-    {% for order in orders %}
-        <li>
-            <a href="{% url 'order_detail' order.pk %}">{{ order }}</a> - {{ order.status }}
-        </li>
-    {% endfor %}
-</ul>
-<a href="{% url 'order_add' %}">Dodaj zamówienie</a>
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="text-center">Twój koszyk</h2>
+<div class="container">
+    {% if orders %}
+        <div class="row justify-content-center">
+            {% for order in orders %}
+                <div class="col-md-4 d-flex align-items-stretch">
+                    <div class="card mb-4 shadow-sm">
+                        {% if order.product.image %}
+                            <img src="{{ order.product.image.url }}" class="card-img-top"
+                                 alt="{{ order.product.name }}"
+                                 style="max-width: 350px; max-height: 150px; object-fit: contain; display: block; margin: 0 auto;">
+                        {% endif %}
+                        <div class="card-body text-center">
+                            <h5 class="card-title">{{ order.product.name }}</h5>
+                            <p class="card-text">Ilość: {{ order.quantity }} szt.</p>
+                            <p class="card-text"><strong>{{ order.product.price }} PLN</strong></p>
+                            <a href="{% url 'order_edit' order.pk %}" class="btn btn-warning">Edytuj</a>
+                            <a href="{% url 'order_delete' order.pk %}" class="btn btn-danger">Usuń</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <a href="{% url 'order_checkout' %}" class="btn btn-primary mt-4">Przejdź do kasy</a>
+    {% else %}
+        <p class="text-center">Twój koszyk jest pusty.</p>
+    {% endif %}
+</div>
+{% endblock %}
