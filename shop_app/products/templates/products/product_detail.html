@@ -15,17 +15,48 @@
             <p class="card-text"><strong>Cena:</strong> <span class="text-success">{{ product.price }} PLN</span></p>
             <p class="card-text"><strong>Stan:</strong> <span class="badge bg-secondary">{{ product.stock }} sztuk</span></p>
             <hr>
-            <form method="POST" action="{% url 'order_add' product.id %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-primary">Dodaj do koszyka</button>
-            </form>
-            <div class="d-flex justify-content-center">
-                <a href="{% url 'product_list' %}" class="btn btn-secondary me-2">Powrót</a>
+            
+            <!-- Przyciski w jednej linii -->
+            <div class="d-flex justify-content-center gap-2">
+                <!-- Formularz dodawania do koszyka -->
+                <form id="add-to-cart-form" method="POST" action="{% url 'order_add' product.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success ms-2">➕ Dodaj do koszyka</button>
+                </form>
+
+                <!-- Powrót -->
+                <a href="{% url 'product_list' %}" class="btn btn-secondary">Powrót</a>
+
+                <!-- Edytuj (tylko dla użytkowników z rolą inną niż 'customer') -->
                 {% if user.is_authenticated and user.role != 'customer' %}
-                    <a href="{% url 'product_edit' product.id %}" class="btn btn-primary">Edytuj</a>
+                    <a href="{% url 'product_edit' product.id %}" class="btn btn-warning">Edytuj</a>
                 {% endif %}
             </div>
+
+            <!-- Komunikat o dodaniu do koszyka -->
+            <p id="cart-message" class="text-success mt-3 fw-bold" style="display: none;">
+                ✅ Produkt dodany do koszyka!
+            </p>
         </div>
     </div>
 </div>
+
+<!-- JavaScript obsługujący AJAX -->
+<script>
+document.getElementById("add-to-cart-form").addEventListener("submit", function(event) {
+    event.preventDefault(); // Blokujemy domyślną akcję formularza
+
+    fetch(this.action, {
+        method: "POST",
+        body: new FormData(this),
+        headers: {
+            "X-Requested-With": "XMLHttpRequest"
+        }
+    }).then(response => {
+        if (response.ok) {
+            document.getElementById("cart-message").style.display = "block"; // Pokazujemy komunikat
+        }
+    }).catch(error => console.error("Błąd:", error));
+});
+</script>
 {% endblock %}

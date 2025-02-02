@@ -16,11 +16,45 @@
                         <h5 class="card-title">{{ product.name }}</h5>
                         <p class="card-text">{{ product.description }}</p>
                         <p class="card-text"><strong>{{ product.price }} PLN</strong></p>
+
+                        <!-- Przycisk "Szczegóły" -->
                         <a href="{% url 'product_detail' product.pk %}" class="btn btn-primary">Szczegóły</a>
+
+                        <!-- Formularz dodawania do koszyka -->
+                        <form class="add-to-cart-form d-inline-block" method="POST" action="{% url 'order_add' product.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success ms-2">➕ Dodaj do koszyka</button>
+                        </form>
                     </div>
                 </div>
             </div>
         {% endfor %}
     </div>
 </div>
+
+<!-- JavaScript obsługujący AJAX -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const forms = document.querySelectorAll(".add-to-cart-form");
+
+    forms.forEach(form => {
+        form.addEventListener("submit", function(event) {
+            event.preventDefault(); // Blokujemy domyślne przeładowanie strony
+
+            fetch(this.action, {
+                method: "POST",
+                body: new FormData(this),
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            }).then(response => {
+                if (response.ok) {
+                    alert("✅ Produkt dodany do koszyka!");
+                }
+            }).catch(error => console.error("Błąd:", error));
+        });
+    });
+});
+</script>
+
 {% endblock %}

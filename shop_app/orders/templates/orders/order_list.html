@@ -1,32 +1,69 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2 class="text-center">Twój koszyk</h2>
+<h2 class="text-center">🛒 Twój koszyk</h2>
 <div class="container">
     {% if orders %}
         <div class="row justify-content-center">
             {% for order in orders %}
-                <div class="col-md-4 d-flex align-items-stretch">
-                    <div class="card mb-4 shadow-sm">
+                <div class="col-md-3 d-flex align-items-stretch"> <!-- Zmieniono na col-md-3 -->
+                    <div class="card mb-4 shadow-sm text-center">
                         {% if order.product.image %}
                             <img src="{{ order.product.image.url }}" class="card-img-top"
                                  alt="{{ order.product.name }}"
                                  style="max-width: 350px; max-height: 150px; object-fit: contain; display: block; margin: 0 auto;">
                         {% endif %}
-                        <div class="card-body text-center">
+                        <div class="card-body">
                             <h5 class="card-title">{{ order.product.name }}</h5>
-                            <p class="card-text">Ilość: {{ order.quantity }} szt.</p>
+                            <p class="card-text">Ilość: <strong>{{ order.quantity }} szt.</strong></p>
                             <p class="card-text"><strong>{{ order.product.price }} PLN</strong></p>
-                            <a href="{% url 'order_edit' order.pk %}" class="btn btn-warning">Edytuj</a>
-                            <a href="{% url 'order_delete' order.pk %}" class="btn btn-danger">Usuń</a>
+
+                            <!-- Przycisk "Edytuj" -->
+                            <a href="{% url 'order_edit' order.pk %}" class="btn btn-warning">✏️ Edytuj</a>
+
+                            <!-- Formularz usuwania z koszyka -->
+                            <form class="remove-from-cart-form d-inline-block" method="POST" action="{% url 'order_delete' order.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger ms-2">🗑 Usuń</button>
+                            </form>
                         </div>
                     </div>
                 </div>
             {% endfor %}
         </div>
-        <a href="{% url 'order_checkout' %}" class="btn btn-primary mt-4">Przejdź do kasy</a>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'order_checkout' %}" class="btn btn-success btn-lg">💳 Przejdź do kasy</a>
+        </div>
     {% else %}
-        <p class="text-center">Twój koszyk jest pusty.</p>
+        <p class="text-center text-muted">Twój koszyk jest pusty.</p>
     {% endif %}
 </div>
+
+<!-- JavaScript obsługujący AJAX dla usuwania produktów -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const forms = document.querySelectorAll(".remove-from-cart-form");
+
+    forms.forEach(form => {
+        form.addEventListener("submit", function(event) {
+            event.preventDefault(); // Blokujemy domyślne przeładowanie strony
+
+            fetch(this.action, {
+                method: "POST",
+                body: new FormData(this),
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            }).then(response => {
+                if (response.ok) {
+                    alert("❌ Produkt usunięty z koszyka!");
+                    location.reload(); // Odświeżenie strony po usunięciu
+                }
+            }).catch(error => console.error("Błąd:", error));
+        });
+    });
+});
+</script>
+
 {% endblock %}

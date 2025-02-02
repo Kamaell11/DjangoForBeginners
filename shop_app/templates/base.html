@@ -59,7 +59,7 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'order_list' %}">
-                                    <i class="fas fa-shopping-cart"></i> Koszyk
+                                    <i class="fas fa-shopping-cart"></i> 🛒 Koszyk
                                     {% if cart_count > 0 %}
                                         <span class="badge badge-warning">{{ cart_count }}</span>
                                     {% endif %}
@@ -69,12 +69,16 @@
                                 <a class="btn btn-danger ms-3" href="{% url 'logout' %}">Wyloguj</a>
                             </li>
                         {% else %}
-                            <li class="nav-item">
-                                <a class="btn btn-primary me-2" href="{% url 'login' %}">Zaloguj</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="btn btn-success" href="{% url 'register' %}">Rejestracja</a>
-                            </li>
+                            {% if request.path_info != '/accounts/login/' %}
+                                <li class="nav-item">
+                                    <a class="btn btn-primary me-2" href="{% url 'login' %}">Zaloguj</a>
+                                </li>
+                            {% endif %}
+                            {% if request.path_info != '/accounts/register/' %}
+                                <li class="nav-item">
+                                    <a class="btn btn-success" href="{% url 'register' %}">Rejestracja</a>
+                                </li>
+                            {% endif %}
                         {% endif %}
                     </ul>
                 </div>

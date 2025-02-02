@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
 from products.models import Product
 from .models import Order
 from .forms import OrderForm, CheckoutForm
+
 def order_list(request):
     # Pobierz zamówienia z bazy danych
     orders = Order.objects.filter(user=request.user)
@@ -14,30 +16,24 @@ def order_list(request):
         'cart_count': cart_count,
     })
 
+@login_required  # Wymaga zalogowania
 def order_checkout(request):
-    # Pobierz zamówienia użytkownika
-    orders = Order.objects.filter(user=request.user)
-    
-    # Jeśli koszyk jest pusty, przekieruj na stronę główną lub koszyka
-    if not orders.exists():
-        return redirect('order_list')  # Możesz zmienić na stronę, na którą chcesz przekierować
-
-    # Jeśli formularz jest przesyłany, zapisujemy dane
-    if request.method == 'POST':
-        form = CheckoutForm(request.POST)
+    if request.method == "POST":
+        form = OrderForm(request.POST)
         if form.is_valid():
-            # Przetwórz dane formularza, np. zapisanie adresu dostawy i finalizacja zamówienia
-            # Tu dodaj logikę zapisania zamówienia i/lub płatności
-            form.save()  # Na przykład zapisanie danych do modelu Order, UserDetails itp.
-            return redirect('order_success')  # Przekierowanie po udanym zamówieniu
+            order = form.save(commit=False)
+            order.user = request.user  # Przypisz użytkownika
+            order.save()  # Zapisz zamówienie
+            
+            print("✅ Zamówienie zapisane!")  # DEBUG w konsoli serwera
+            return redirect('order_success')  # Przekierowanie do strony sukcesu
+        else:
+            print("❌ Błędy formularza:", form.errors)  # DEBUG
+
     else:
-        form = CheckoutForm()
+        form = OrderForm()
 
-    return render(request, 'orders/checkout.html', {
-        'orders': orders,
-        'form': form,
-    })
-
+    return render(request, 'orders/checkout.html', {'form': form})
 
 def order_detail(request, pk):
     """Szczegóły zamówienia"""
@@ -64,18 +60,16 @@ def order_add(request, product_id):
     
     return redirect('order_list')
 
-def order_edit(request, pk):
-    """Edycja zamówienia"""
-    order = get_object_or_404(Order, pk=pk)
+def order_edit(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
     if request.method == "POST":
         form = OrderForm(request.POST, instance=order)
         if form.is_valid():
             form.save()
-            return redirect('order_detail', pk=order.pk)
+            return redirect('order_list')  # lub inny widok po zapisaniu
     else:
         form = OrderForm(instance=order)
-    return render(request, 'orders/order_edit.html', {'form': form, 'order': order})
-
+    return render(request, 'order_edit.html', {'form': form, 'order': order})
 def order_delete(request, pk):
     """Usuwanie zamówienia"""
     order = get_object_or_404(Order, pk=pk)
@@ -83,3 +77,6 @@ def order_delete(request, pk):
         order.delete()
         return redirect('order_list')
     return render(request, 'orders/order_confirm_delete.html', {'order': order})
+
+def order_success(request):
+    return render(request, 'orders/order_success.html')

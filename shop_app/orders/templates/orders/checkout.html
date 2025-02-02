@@ -1,8 +1,69 @@
-<h1>Twoje zamówienie</h1>
-<p>Wszystkie produkty znajdują się w Twoim koszyku. Proszę podać dane do wysyłki.</p>
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-5">
+    <h2 class="text-center mb-4">Dane do wysyłki i płatności</h2>
 
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}  <!-- Renderowanie formularza -->
-    <button type="submit" class="btn btn-primary">Zakończ zamówienie</button>
-</form>
+    <form method="POST" class="form card p-4 col-md-8 col-lg-6 mx-auto" onsubmit="return submitOrder(event)">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="id_full_name">Imię i nazwisko</label>
+            {{ form.full_name }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_phone_number">Numer telefonu</label>
+            {{ form.phone_number }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_address">Adres</label>
+            {{ form.address }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_payment_method">Metoda płatności</label>
+            {{ form.payment_method }}
+        </div>
+
+     
+        <button type="submit" class="btn btn-primary w-100 mt-3">Zakończ zamówienie</button>
+    </form>
+</div>
+
+<script>
+    function submitOrder(event) {
+        event.preventDefault(); // Zatrzymuje domyślne wysyłanie formularza
+    
+        let formData = new FormData(event.target);
+    
+        console.log("Wysyłanie zamówienia..."); // DEBUG
+    
+        fetch("{% url 'order_checkout' %}", { 
+            method: "POST",
+            body: formData,
+            headers: {
+                "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
+            }
+        })
+        .then(response => {
+            console.log("Odpowiedź otrzymana", response);
+            return response.json();
+        })
+        .then(data => {
+            console.log("Dane z serwera:", data); // DEBUG
+    
+            if (data.success) {
+                alert("✅ Zamówienie złożone!");
+                window.location.href = "{% url 'order_success' %}";
+            } else {
+                alert("❌ Błąd: " + data.error);
+            }
+        })
+        .catch(error => {
+            console.error("Błąd:", error);
+            alert("Coś poszło nie tak!");
+        });
+    }
+    </script>
+{% endblock %}
