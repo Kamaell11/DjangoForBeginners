@@ -6,7 +6,6 @@
     <title>{% block title %}Weiboo Shoe Store{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"/>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -14,45 +13,135 @@
     </style>
 </head>
 <body class="bg-gray-100">
-    <!-- Header -->
-    <header class="bg-white shadow-md">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+    <!-- Top Bar -->
+    <div class="bg-orange-700 text-white text-sm py-2">
+        <div class="container mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-4">
-                <img alt="Logo of Weiboo" class="h-10" src="https://storage.googleapis.com/a1aa/image/lCPS-SL9f7YOQX6nYNRdNykY_MnvnXygiD61tmEtVH4.jpg" />
-                <nav class="hidden md:flex space-x-4">
-                    <a class="text-gray-700 hover:text-blue-500" href="#">Home</a>
-                    <a class="text-gray-700 hover:text-blue-500" href="#">Shop</a>
-                    <a class="text-gray-700 hover:text-blue-500" href="#">About</a>
-                    <a class="text-gray-700 hover:text-blue-500" href="#">Contact</a>
-                </nav>
+                <div class="flex items-center space-x-1">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Store Locator</span>
+                </div>
+                <div class="flex items-center space-x-1">
+                    <i class="fas fa-envelope"></i>
+                    <span>support@reachtheme.com</span>
+                </div>
             </div>
-            <div class="flex items-center space-x-4">
-                <a class="text-gray-700 hover:text-blue-500" href="#"><i class="fas fa-search"></i></a>
-                <a class="text-gray-700 hover:text-blue-500" href="#"><i class="fas fa-user"></i></a>
-                <a class="text-gray-700 hover:text-blue-500" href="#"><i class="fas fa-shopping-cart"></i></a>
+            <div>
+                <span>Enjoy free shipping on orders $100 up | </span>
+                <a href="#" class="underline">Discover Now</a>
             </div>
         </div>
-    </header>
+    </div>
+
+    <!-- Main Navigation -->
+    <div class="bg-white py-4 shadow">
+        <div class="container mx-auto flex justify-between items-center">
+            <!-- Logo -->
+            <div class="text-3xl font-bold">
+                WEIBOO<span class="text-orange-700">.</span>
+            </div>
+            <!-- Navigation Links -->
+            <div class="flex space-x-8 text-lg">
+                <a href="#" class="text-orange-700">Home <span class="text-orange-700">+</span></a>
+                <a href="#" class="text-gray-700">Shop <span class="text-gray-700">+</span></a>
+                <a href="#" class="text-gray-700">Pages <span class="text-gray-700">+</span></a>
+                <a href="#" class="text-gray-700">Blog <span class="text-gray-700">+</span></a>
+                <a href="#" class="text-gray-700">Contact</a>
+            </div>
+            <!-- Icons and Dropdowns -->
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-2">
+                    <span>English</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span>USD</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="bg-gray-100 p-2 rounded-full">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="bg-gray-100 p-2 rounded-full">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="relative bg-gray-100 p-2 rounded-full">
+                        <i class="fas fa-shopping-basket"></i>
+                        <span class="absolute top-0 right-0 bg-orange-700 text-white text-xs rounded-full px-1">3</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     {% block content %}{% endblock %}
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8">
-        <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-4 md:mb-0">
-                    <img alt="Footer logo of Weiboo" class="h-10" src="https://storage.googleapis.com/a1aa/image/IpMtMyBAe-v72aGdoU0R6Jww2MYeBWUjvttplvakoeA.jpg" />
+    <!-- Footer Section -->
+    <footer class="py-12 bg-black text-white">
+        <div class="container mx-auto grid grid-cols-1 md:grid-cols-5 gap-8">
+            <div class="col-span-2">
+                <h2 class="text-3xl font-bold mb-4">WEIBOO.</h2>
+                <p class="italic mb-4">" This is genuinely the first theme I bought for which I did not have to write one line of code. I would recommend everybody to get it. "</p>
+                <div class="flex items-center mb-2">
+                    <i class="fas fa-comments text-orange-500 mr-2"></i>
+                    <div>
+                        <p class="font-bold">Get Support</p>
+                        <p>info@webmail.com</p>
+                    </div>
                 </div>
-                <div class="flex space-x-4">
-                    <a class="text-gray-400 hover:text-white" href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a class="text-gray-400 hover:text-white" href="#"><i class="fab fa-twitter"></i></a>
-                    <a class="text-gray-400 hover:text-white" href="#"><i class="fab fa-instagram"></i></a>
-                    <a class="text-gray-400 hover:text-white" href="#"><i class="fab fa-linkedin-in"></i></a>
+                <div class="flex items-center">
+                    <i class="fas fa-phone-alt text-orange-500 mr-2"></i>
+                    <div>
+                        <p class="font-bold">Call Us</p>
+                        <p>755. 652. 365. 95</p>
+                    </div>
                 </div>
             </div>
-            <div class="mt-8 text-center text-gray-400">
-                © 2023 Weiboo. All rights reserved.
+            <div>
+                <h3 class="font-bold mb-4">Information</h3>
+                <ul>
+                    <li class="mb-2">Custom Service</li>
+                    <li class="mb-2">FAQs</li>
+                    <li class="mb-2">Ordering</li>
+                    <li class="mb-2">Tracking</li>
+                    <li class="mb-2">Contacts</li>
+                    <li class="mb-2">Events</li>
+                </ul>
             </div>
+            <div>
+                <h3 class="font-bold mb-4">My Account</h3>
+                <ul>
+                    <li class="mb-2">Delivery Information</li>
+                    <li class="mb-2">Privacy Policy</li>
+                    <li class="mb-2">Discount</li>
+                    <li class="mb-2">Custom Service</li>
+                    <li class="mb-2">Terms &amp; Conditions</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="font-bold mb-4">Social Network</h3>
+                <ul>
+                    <li class="mb-2 flex items-center"><i class="fab fa-facebook mr-2"></i> Facebook</li>
+                    <li class="mb-2 flex items-center"><i class="fab fa-linkedin mr-2"></i> Linkedin</li>
+                    <li class="mb-2 flex items-center"><i class="fab fa-twitter mr-2"></i> Twitter</li>
+                    <li class="mb-2 flex items-center"><i class="fab fa-behance mr-2"></i> Behance</li>
+                    <li class="mb-2 flex items-center"><i class="fab fa-youtube mr-2"></i> YouTube</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="font-bold mb-4">Instagram Feeds</h3>
+                <div class="grid grid-cols-3 gap-2">
+                    <img alt="Instagram feed image 1" height="100" src="https://storage.googleapis.com/a1aa/image/acXLkFtyDvPCgW5qqHRQP0Bpamao1oRwCYevaRNP9BI.jpg" width="100"/>
+                    <img alt="Instagram feed image 2" height="100" src="https://storage.googleapis.com/a1aa/image/lL8DIyRHikp22Hi9Y702UxRRJNFKSoMc03sdnQkhgBU.jpg" width="100"/>
+                    <img alt="Instagram feed image 3" height="100" src="https://storage.googleapis.com/a1aa/image/ym6jAdOnblgZoLQCJJf0xNwQjoXcS9l9P2C6XTP6szs.jpg" width="100"/>
+                    <img alt="Instagram feed image 4" height="100" src="https://storage.googleapis.com/a1aa/image/w_U-7o9IPNn9OSknOcjENlR6YgUGtwinEGoorOXiduw.jpg" width="100"/>
+                    <img alt="Instagram feed image 5" height="100" src="https://storage.googleapis.com/a1aa/image/Zta4Laa67cfrtNkPD233yeQK082xLfCfM8BB-MTtTfA.jpg" width="100"/>
+                    <img alt="Instagram feed image 6" height="100" src="https://storage.googleapis.com/a1aa/image/nERT1Zt0nd6emmX3go32IaxNY5kd6eIt-SnLIKghxsU.jpg" width="100"/>
+                </div>
+            </div>
+        </div>
+        <div class="container mx-auto mt-8 text-center">
+            <p>Copyright 2025 ©Weiboo. All rights reserved. Powered by <span class="text-orange-500">Parv Infotech.</span></p>
         </div>
     </footer>
 </body>
