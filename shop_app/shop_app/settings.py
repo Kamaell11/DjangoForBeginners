@@ -134,3 +134,4 @@ STATICFILES_DIRS = [
 
 # Dodaj także:
 STATIC_ROOT = BASE_DIR / "static"  # Dla zbierania plików statycznych
+REQUIRE_LOGIN_PUBLIC_URLS = (r'^/$',)

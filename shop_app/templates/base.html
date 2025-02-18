@@ -1,122 +1,59 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Opis Twojej aplikacji">
-    <meta name="keywords" content="słowa kluczowe, aplikacja, django">
-    <meta name="author" content="Twoja Nazwa">
-    <meta name="robots" content="index, follow">
-    <title>{% block title %}Moja Aplikacja{% endblock %}</title>
-
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Dodatkowe style CSS -->
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>{% block title %}Weiboo Shoe Store{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"/>
     <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-        }
-        .wrapper {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        .content {
-            flex: 1;
-        }
-        .footer {
-            background-color: #f8f9fa;
-            padding: 20px 0;
-            text-align: center;
+        body {
+            font-family: 'Roboto', sans-serif;
         }
     </style>
-
-    {% block extra_css %}
-    {% endblock %}
 </head>
-<body>
-    <div class="wrapper">
-        <!-- Nawigacja -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container">
-                <a class="navbar-brand" href="{% url 'product_list' %}">Shop app</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'product_list' %}">Strona Główna</a>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav ms-auto d-flex align-items-center">
-                        {% if user.is_authenticated %}
-                            <li class="nav-item me-auto">
-                                <span class="navbar-text fw-bold d-flex align-items-center"
-                                      style="height: 100%; font-size: 18px;">Witaj, {{ user.username }}!</span>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'order_list' %}">
-                                    <i class="fas fa-shopping-cart"></i> 🛒 Koszyk
-                                    {% if cart_count > 0 %}
-                                        <span class="badge badge-warning">{{ cart_count }}</span>
-                                    {% endif %}
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="btn btn-danger ms-3" href="{% url 'logout' %}">Wyloguj</a>
-                            </li>
-                        {% else %}
-                            {% if request.path_info != '/accounts/login/' %}
-                                <li class="nav-item">
-                                    <a class="btn btn-primary me-2" href="{% url 'login' %}">Zaloguj</a>
-                                </li>
-                            {% endif %}
-                            {% if request.path_info != '/accounts/register/' %}
-                                <li class="nav-item">
-                                    <a class="btn btn-success" href="{% url 'register' %}">Rejestracja</a>
-                                </li>
-                            {% endif %}
-                        {% endif %}
-                    </ul>
+<body class="bg-gray-100">
+    <!-- Header -->
+    <header class="bg-white shadow-md">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <img alt="Logo of Weiboo" class="h-10" src="https://storage.googleapis.com/a1aa/image/lCPS-SL9f7YOQX6nYNRdNykY_MnvnXygiD61tmEtVH4.jpg" />
+                <nav class="hidden md:flex space-x-4">
+                    <a class="text-gray-700 hover:text-blue-500" href="#">Home</a>
+                    <a class="text-gray-700 hover:text-blue-500" href="#">Shop</a>
+                    <a class="text-gray-700 hover:text-blue-500" href="#">About</a>
+                    <a class="text-gray-700 hover:text-blue-500" href="#">Contact</a>
+                </nav>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a class="text-gray-700 hover:text-blue-500" href="#"><i class="fas fa-search"></i></a>
+                <a class="text-gray-700 hover:text-blue-500" href="#"><i class="fas fa-user"></i></a>
+                <a class="text-gray-700 hover:text-blue-500" href="#"><i class="fas fa-shopping-cart"></i></a>
+            </div>
+        </div>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <img alt="Footer logo of Weiboo" class="h-10" src="https://storage.googleapis.com/a1aa/image/IpMtMyBAe-v72aGdoU0R6Jww2MYeBWUjvttplvakoeA.jpg" />
+                </div>
+                <div class="flex space-x-4">
+                    <a class="text-gray-400 hover:text-white" href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a class="text-gray-400 hover:text-white" href="#"><i class="fab fa-twitter"></i></a>
+                    <a class="text-gray-400 hover:text-white" href="#"><i class="fab fa-instagram"></i></a>
+                    <a class="text-gray-400 hover:text-white" href="#"><i class="fab fa-linkedin-in"></i></a>
                 </div>
             </div>
-        </nav>
-
-        <!-- Komunikaty -->
-        <div class="container mt-3">
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        </div>
-
-        <!-- Główna zawartość strony -->
-        <div class="content">
-            <div class="container mt-4">
-                {% block content %}
-                {% endblock %}
+            <div class="mt-8 text-center text-gray-400">
+                © 2023 Weiboo. All rights reserved.
             </div>
         </div>
-
-        <!-- Stopka -->
-        <footer class="footer mt-auto">
-            <div class="container">
-                <p class="mb-0">&copy; 2025 Moja Aplikacja. Wszelkie prawa zastrzeżone.</p>
-            </div>
-        </footer>
-    </div>
-
-    <!-- Bootstrap 5 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    {% block extra_js %}
-    {% endblock %}
+    </footer>
 </body>
 </html>

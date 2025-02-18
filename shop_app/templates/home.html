@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Weiboo Shoe Store - Home{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative bg-blue-500 text-white">
+    <img alt="Hero image" class="w-full h-full object-cover opacity-50" src="https://storage.googleapis.com/a1aa/image/NxNn7nfuj7YRqcleMTUc_g97A5PtDyzZwek_wYf0qgQ.jpg" />
+    <div class="absolute inset-0 flex flex-col justify-center items-center text-center">
+        <h1 class="text-4xl md:text-6xl font-bold">Step into Style</h1>
+        <p class="mt-4 text-lg md:text-2xl">Discover the latest trends in footwear</p>
+        <a class="mt-6 px-6 py-3 bg-white text-blue-500 font-semibold rounded-full" href="#">Shop Now</a>
+    </div>
+</section>
+
+<!-- Small Products Section -->
+<section class="py-16 bg-gray-100">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold">New Arrivals</h2>
+            <p class="mt-4 text-gray-600">Explore our latest collection</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-8">
+            <!-- Product Cards -->
+            <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                <img alt="Red Sneakers" class="mx-auto mb-4" src="https://storage.googleapis.com/a1aa/image/Of27so9ezB7OVNrKur7zwDn_KUw4oFgjCNftXy4Ir04.jpg" />
+                <h3 class="text-lg font-semibold">Red Sneakers</h3>
+                <p class="mt-2 text-gray-600">$80.00</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                <img alt="Blue Running Shoes" class="mx-auto mb-4" src="https://storage.googleapis.com/a1aa/image/nKCcYnbdw8QwgETSrXu0qhx1O9saKYKynm7sFqUVSMU.jpg" />
+                <h3 class="text-lg font-semibold">Blue Running Shoes</h3>
+                <p class="mt-2 text-gray-600">$100.00</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                <img alt="Black Formal Shoes" class="mx-auto mb-4" src="https://storage.googleapis.com/a1aa/image/qPq-2OrG2WwesIkMvDt4q1pmMtO_0EtqFc2cYtndLqA.jpg" />
+                <h3 class="text-lg font-semibold">Black Formal Shoes</h3>
+                <p class="mt-2 text-gray-600">$120.00</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                <img alt="White Casual Shoes" class="mx-auto mb-4" src="https://storage.googleapis.com/a1aa/image/Of27so9ezB7OVNrKur7zwDn_KUw4oFgjCNftXy4Ir04.jpg" />
+                <h3 class="text-lg font-semibold">White Casual Shoes</h3>
+                <p class="mt-2 text-gray-600">$90.00</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                <img alt="Green Sports Shoes" class="mx-auto mb-4" src="https://storage.googleapis.com/a1aa/image/nKCcYnbdw8QwgETSrXu0qhx1O9saKYKynm7sFqUVSMU.jpg" />
+                <h3 class="text-lg font-semibold">Green Sports Shoes</h3>
+                <p class="mt-2 text-gray-600">$110.00</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                <img alt="Brown Leather Shoes" class="mx-auto mb-4" src="https://storage.googleapis.com/a1aa/image/qPq-2OrG2WwesIkMvDt4q1pmMtO_0EtqFc2cYtndLqA.jpg" />
+                <h3 class="text-lg font-semibold">Brown Leather Shoes</h3>
+                <p class="mt-2 text-gray-600">$130.00</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products Section -->
+<section class="py-16 bg-gray-100">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold">Featured Products</h2>
+            <p class="mt-4 text-gray-600">Check out our latest arrivals</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                <img alt="Running Shoes" class="mx-auto mb-4" src="https://storage.googleapis.com/a1aa/image/Of27so9ezB7OVNrKur7zwDn_KUw4oFgjCNftXy4Ir04.jpg" />
+                <h3 class="text-xl font-semibold">Running Shoes</h3>
+                <p class="mt-2 text-gray-600">$120.00</p>
+                <a class="mt-4 inline-block text-blue-500 hover:underline" href="#">View Details</a>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                <img alt="Casual Sneakers" class="mx-auto mb-4" src="https://storage.googleapis.com/a1aa/image/nKCcYnbdw8QwgETSrXu0qhx1O9saKYKynm7sFqUVSMU.jpg" />
+                <h3 class="text-xl font-semibold">Casual Sneakers</h3>
+                <p class="mt-2 text-gray-600">$90.00</p>
+                <a class="mt-4 inline-block text-blue-500 hover:underline" href="#">View Details</a>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                <img alt="Formal Shoes" class="mx-auto mb-4" src="https://storage.googleapis.com/a1aa/image/qPq-2OrG2WwesIkMvDt4q1pmMtO_0EtqFc2cYtndLqA.jpg" />
+                <h3 class="text-xl font-semibold">Formal Shoes</h3>
+                <p class="mt-2 text-gray-600">$150.00</p>
+                <a class="mt-4 inline-block text-blue-500 hover:underline" href="#">View Details</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Latest News Section -->
+<section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold">Latest News</h2>
+            <p class="mt-4 text-gray-600">Stay updated with the latest news and updates</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+                <img alt="New Collection Launch" class="w-full h-48 object-cover rounded-md mb-4" src="https://storage.googleapis.com/a1aa/image/fxi8s09S5xYpojs6hA14q5rfruZ-MRSs55KGD5gnPGM.jpg" />
+                <h3 class="text-xl font-semibold">New Collection Launch</h3>
+                <p class="mt-2 text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                <a class="mt-4 inline-block text-blue-500 hover:underline" href="#">Read More</a>
+            </div>
+            <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+                <img alt="Behind the Scenes" class="w-full h-48 object-cover rounded-md mb-4" src="https://storage.googleapis.com/a1aa/image/ANyVWa-SG5TJnw-Ms4bvfMq_rrKW5wHU689NGFes-cY.jpg" />
+                <h3 class="text-xl font-semibold">Behind the Scenes</h3>
+                <p class="mt-2 text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                <a class="mt-4 inline-block text-blue-500 hover:underline" href="#">Read More</a>
+            </div>
+            <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+                <img alt="Celebrity Endorsement" class="w-full h-48 object-cover rounded-md mb-4" src="https://storage.googleapis.com/a1aa/image/tN-GWelA8Ga-JU03jPH28ybUDCt5xfIl3e9E4DjFVto.jpg" />
+                <h3 class="text-xl font-semibold">Celebrity Endorsement</h3>
+                <p class="mt-2 text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                <a class="mt-4 inline-block text-blue-500 hover:underline" href="#">Read More</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -5,18 +5,22 @@ from .models import Order
 from .forms import OrderForm, CheckoutForm
 
 def order_list(request):
-    # Pobierz zamówienia z bazy danych
-    orders = Order.objects.filter(user=request.user)
-    
-    # Liczba produktów w koszyku
-    cart_count = orders.count()
+    if request.user.is_authenticated:
+        orders = Order.objects.filter(user=request.user)
+        cart_count = orders.count()
+    else:
+        # Pobranie koszyka z sesji
+        cart = request.session.get('cart', {})
+        products = Product.objects.filter(id__in=cart.keys())
+        orders = [{'product': p, 'quantity': cart[str(p.id)]} for p in products]
+        cart_count = sum(cart.values())
 
     return render(request, 'orders/order_list.html', {
         'orders': orders,
         'cart_count': cart_count,
     })
 
-@login_required  # Wymaga zalogowania
+# @login_required  # Wymaga zalogowania
 def order_checkout(request):
     if request.method == "POST":
         form = OrderForm(request.POST)
@@ -43,21 +47,25 @@ def order_detail(request, pk):
 def order_add(request, product_id):
     """Dodawanie produktu do koszyka"""
     product = get_object_or_404(Product, id=product_id)
-    # Sprawdzamy, czy użytkownik ma już aktywne zamówienie
-    order = Order.objects.filter(user=request.user, status='pending').first()
-    
-    if not order:
-        # Jeśli brak aktywnego zamówienia, tworzymy nowe
-        order = Order.objects.create(user=request.user, product=product, quantity=1, status='pending')
-    else:
-        # Jeśli zamówienie już istnieje, zwiększamy ilość produktu
-        existing_order = Order.objects.filter(user=request.user, product=product, status='pending').first()
-        if existing_order:
-            existing_order.quantity += 1
-            existing_order.save()
+
+    if request.user.is_authenticated:
+        order = Order.objects.filter(user=request.user, status='pending').first()
+        
+        if not order:
+            order = Order.objects.create(user=request.user, product=product, quantity=1, status='pending')
         else:
-            Order.objects.create(user=request.user, product=product, quantity=1, status='pending')
-    
+            existing_order = Order.objects.filter(user=request.user, product=product, status='pending').first()
+            if existing_order:
+                existing_order.quantity += 1
+                existing_order.save()
+            else:
+                Order.objects.create(user=request.user, product=product, quantity=1, status='pending')
+    else:
+        # Jeśli użytkownik nie jest zalogowany, zapisujemy koszyk w sesji
+        cart = request.session.get('cart', {})
+        cart[str(product.id)] = cart.get(str(product.id), 0) + 1
+        request.session['cart'] = cart
+
     return redirect('order_list')
 
 def order_edit(request, order_id):

@@ -23,13 +23,14 @@ from users import views as user_views
 
 from django.views.generic import TemplateView  # Zaimportuj TemplateView
 
+from products import views as product_views  # Jeśli masz stronę główną w 'products/views.py'
+
 urlpatterns = [
-    path('', user_views.login_view, name='home'),  # Strona główna to teraz logowanie
+    path("", product_views.home, name="home"),  # Strona główna dostępna dla wszystkich! ✅
     path('admin/', admin.site.urls),
-    path('products/', include('products.urls')),  # Strona z produktami
-    path('users/', include('users.urls')),  # Strona z użytkownikami (logowanie, rejestracja)
-    path('orders/', include('orders.urls')),  # Strona z zamówieniami
-    # Strony logowania i rejestracji
+    path('products/', include('products.urls')),
+    path('users/', include('users.urls')),
+    path('orders/', include('orders.urls')),
     path('accounts/login/', user_views.login_view, name='login'),
     path('accounts/logout/', user_views.logout_view, name='logout'),
     path('accounts/register/', user_views.register_view, name='register'),

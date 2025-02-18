@@ -5,11 +5,13 @@ from .models import Product
 from .forms import ProductForm
 from orders.models import Order 
 
+def home(request):
+    return render(request, "home.html")
 
 def is_customer_or_admin(user):
     return user.is_authenticated and user.role in ["customer", "admin"]
 
-@login_required
+
 def product_list(request):
     products = Product.objects.all()
     cart_count = 0
@@ -17,7 +19,7 @@ def product_list(request):
         cart_count = Order.objects.filter(user=request.user, status='pending').count()
     return render(request, 'products/product_list.html', {'products': products, 'cart_count': cart_count})
 
-@login_required
+
 def product_detail(request, pk):
     """Szczegóły produktu"""
     product = get_object_or_404(Product, pk=pk)
