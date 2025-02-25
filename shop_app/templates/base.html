@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>{% block title %}Weiboo Shoe Store{% endblock %}</title>
+    <title>{% block title %} Shoe Store{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
     <style>
@@ -14,7 +14,7 @@
 </head>
 <body class="bg-gray-100">
     <!-- Top Bar -->
-    <div class="bg-orange-700 text-white text-sm py-2">
+    <div class="bg-gradient-to-r from-[#e3b9df] to-[rgba(253,171,217,255)] text-white text-sm py-2">
         <div class="container mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-4">
                 <div class="flex items-center space-x-1">
@@ -38,41 +38,71 @@
         <div class="container mx-auto flex justify-between items-center">
             <!-- Logo -->
             <div class="text-3xl font-bold">
-                WEIBOO<span class="text-orange-700">.</span>
+                Shoe store<span class="text-orange-700">.</span>
             </div>
             <!-- Navigation Links -->
             <div class="flex space-x-8 text-lg">
-                <a href="#" class="text-orange-700">Home <span class="text-orange-700">+</span></a>
-                <a href="#" class="text-gray-700">Shop <span class="text-gray-700">+</span></a>
-                <a href="#" class="text-gray-700">Pages <span class="text-gray-700">+</span></a>
-                <a href="#" class="text-gray-700">Blog <span class="text-gray-700">+</span></a>
+                <a href="{% url 'home' %}" class="text-orange-700">Home <span class="text-orange-700"></span></a>
+                <a href="{% url 'product_list' %}" class="text-gray-700">Shop <span class="text-gray-700"></span></a>
+                <a href="#" class="text-gray-700">Blog <span class="text-gray-700"></span></a>
                 <a href="#" class="text-gray-700">Contact</a>
             </div>
+            
             <!-- Icons and Dropdowns -->
             <div class="flex items-center space-x-4">
-                <div class="flex items-center space-x-2">
-                    <span>English</span>
-                    <i class="fas fa-chevron-down"></i>
+                <div class="flex items-center space-x-4">
+                    <div class="relative group">
+                        <button class="flex items-center cursor-pointer">  <span>English</span>
+                            <i class="fas fa-chevron-down ml-2"></i>  </button>
+                        <div class="absolute right-0 mt-2 bg-white shadow-lg rounded-lg w-48 opacity-0 group-hover:opacity-100 transition-opacity z-10 pointer-events-none group-hover:pointer-events-auto">  <a class="block px-4 py-2 text-gray-700 whitespace-nowrap" href="#" onclick="changeLanguage('en')">English</a> <a class="block px-4 py-2 text-gray-700 whitespace-nowrap" href="#" onclick="changeLanguage('pl')">Polski</a> </div>
+                    </div>
+            
+                    <div class="relative group">
+                        <button class="flex items-center cursor-pointer">  <span>USD</span>
+                            <i class="fas fa-chevron-down ml-2"></i>  </button>
+                        <div class="absolute right-0 mt-2 bg-white shadow-lg rounded-lg w-48 opacity-0 group-hover:opacity-100 transition-opacity z-10 pointer-events-none group-hover:pointer-events-auto">  <a class="block px-4 py-2 text-gray-700 whitespace-nowrap" href="#" onclick="changeCurrency('USD')">USD</a> <a class="block px-4 py-2 text-gray-700 whitespace-nowrap" href="#" onclick="changeCurrency('PLN')">PLN</a> </div>
+                    </div>
                 </div>
-                <div class="flex items-center space-x-2">
-                    <span>USD</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
+            </div>
                 <div class="flex items-center space-x-4">
                     <div class="bg-gray-100 p-2 rounded-full">
                         <i class="fas fa-search"></i>
                     </div>
-                    <div class="bg-gray-100 p-2 rounded-full">
-                        <i class="fas fa-user"></i>
+                    <div class="relative bg-gray-100 p-2 rounded-full">
+                        <!-- User icon with dropdown -->
+                        {% if user.is_authenticated %}
+                        <div class="relative">
+                            <span class="navbar-text fw-bold d-flex align-items-center" style="height: 100%; font-size: 18px;">Witaj, {{ user.username }}!</span>
+                            <div class="absolute top-0 right-0 p-2 cursor-pointer">
+                                <i class="fas fa-user"></i>
+                                <!-- Dropdown for logged-in user -->
+                                <div class="absolute right-0 mt-2 bg-white shadow-lg rounded-lg w-48 z-10">
+                                    <a class="block px-4 py-2 text-gray-700" href="{% url 'logout' %}">Wyloguj</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <!-- Dropdown for guests -->
+                        <div class="relative group">
+                            <i class="fas fa-user cursor-pointer"></i>
+                            <div class="absolute right-0 mt-2 bg-white shadow-lg rounded-lg w-48 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                                <a class="block px-4 py-2 text-gray-700" href="{% url 'login' %}">Zaloguj</a>
+                                <a class="block px-4 py-2 text-gray-700" href="{% url 'register' %}">Rejestracja</a>
+                            </div>
+                        </div>
+                        {% endif %}
                     </div>
                     <div class="relative bg-gray-100 p-2 rounded-full">
-                        <i class="fas fa-shopping-basket"></i>
-                        <span class="absolute top-0 right-0 bg-orange-700 text-white text-xs rounded-full px-1">3</span>
+                        <a href="{% url 'order_list' %}">
+                            <i class="fas fa-shopping-basket"></i>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+
 
     {% block content %}{% endblock %}
 

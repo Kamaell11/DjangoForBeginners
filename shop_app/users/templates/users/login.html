@@ -1,109 +1,83 @@
 {% extends "base.html" %}
 
-
 {% block content %}
-<div class="container d-flex justify-content-center align-items-center min-vh-100">
-    <div class="card shadow-lg p-4 rounded w-100" style="max-width: 450px;">
-        <h2 class="text-center mb-3 fw-bold">Logowanie</h2>
-
-        <!-- Wyświetlanie błędów globalnych -->
+<div class="container mx-auto px-4 py-16">
+    <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-2xl font-bold text-center mb-4">Logowanie</h2>
+        
         {% if form.non_field_errors %}
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                {% for error in form.non_field_errors %}
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <strong class="font-bold">Błąd!</strong>
+            <span class="block sm:inline">
+                <ul>
+                    {% for error in form.non_field_errors %}
                     <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
+                    {% endfor %}
+                </ul>
+            </span>
         </div>
         {% endif %}
 
         <form method="POST">
             {% csrf_token %}
 
-            <div class="mb-3">
-                <label for="id_username" class="form-label fw-semibold">Nazwa użytkownika</label>
-                <div class="input-group">
-                    {{ form.username }}
-                </div>
+            <div class="mb-4">
+                <label for="id_username" class="block text-gray-700 font-bold mb-2">Nazwa użytkownika</label>
+                {{ form.username }}
                 {% if form.username.errors %}
-                <div class="text-danger small">
+                <p class="text-red-500 text-sm mt-1">
                     {% for error in form.username.errors %}
-                        {{ error }}
+                    {{ error }}
                     {% endfor %}
-                </div>
+                </p>
                 {% endif %}
             </div>
 
-            <div class="mb-3">
-                <label for="id_password" class="form-label fw-semibold">Hasło</label>
-                <div class="input-group">
-                    <input type="password" name="password" id="id_password" class="form-control">
-                    <span class="input-group-text toggle-password" style="cursor:pointer;">
-                        👁️
+            <div class="mb-6">
+                <label for="id_password" class="block text-gray-700 font-bold mb-2">Hasło</label>
+                <div class="relative">
+                    <input type="password" name="password" id="id_password" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <span class="absolute inset-y-0 right-0 flex items-center px-3 cursor-pointer toggle-password">
+                        <i class="fas fa-eye"></i>
                     </span>
                 </div>
-                
                 {% if form.password.errors %}
-                <div class="text-danger small">
+                <p class="text-red-500 text-sm mt-1">
                     {% for error in form.password.errors %}
-                        {{ error }}
+                    {{ error }}
                     {% endfor %}
-                </div>
+                </p>
                 {% endif %}
             </div>
 
-            <button type="submit" class="btn btn-primary w-100 fw-bold">Zaloguj się</button>
+            <div class="flex items-center justify-between">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    Zaloguj się
+                </button>
+                <a href="#" class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
+                    Zapomniałeś hasła?
+                </a>
+            </div>
         </form>
 
-        <div class="text-center mt-3">
-            <p>Nie masz konta? <a href="{% url 'register' %}" class="text-decoration-none fw-semibold">Zarejestruj się</a></p>
-            <p><a href="#" class="text-decoration-none fw-semibold">Zapomniałeś hasła?</a></p>
-        </div>
+        <p class="text-center mt-4">
+            Nie masz konta? <a href="{% url 'register' %}" class="text-blue-500 hover:underline">Zarejestruj się</a>
+        </p>
     </div>
 </div>
 
-<!-- Skrypt do pokazywania/ukrywania hasła -->
 <script>
     document.querySelectorAll('.toggle-password').forEach(button => {
         button.addEventListener('click', function() {
             let input = this.previousElementSibling;
             if (input.type === "password") {
                 input.type = "text";
-                this.innerHTML = "🙈";
+                this.innerHTML = '<i class="fas fa-eye-slash"></i>';
             } else {
                 input.type = "password";
-                this.innerHTML = "👁️";
+                this.innerHTML = '<i class="fas fa-eye"></i>';
             }
         });
     });
 </script>
-
-<style>
-    .input-group input {
-        width: 100%;
-        box-sizing: border-box;
-    }
-
-
-    .input-group-text.toggle-password {
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #f8f9fa;
-        border: 1px solid #ced4da;
-        border-left: none;
-        cursor: pointer;
-    }
-
-    .input-group-text.toggle-password:hover {
-        background-color: #e9ecef;
-    }
-
-
-
-    .btn-primary:hover {
-        background-color: #0b5ed7;
-    }
-</style>
 {% endblock %}
