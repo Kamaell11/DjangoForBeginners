@@ -164,19 +164,7 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="has-dropdown"><a class="menu-item menu-item {% if subTitle == 'Pages' %}
-                                                                                          active1
-                                                                                       {% endif %} " href="#">Pages <i class="rt-plus"></i></a>
-                                    <ul class="dropdown-ul">
-                                        <li class="dropdown-li"><a class="dropdown-link" href="{% url 'about' %}">About</a>
-                                        </li>
-                                        <li class="dropdown-li"><a class="dropdown-link" href="{% url 'faq' %}">FAQ's</a>
-                                        </li>
-                                        <li class="dropdown-li"><a class="dropdown-link" href="{% url 'errorPage' %}">Error
-                                                404</a>
-                                        </li>
-                                    </ul>
-                                </li>
+
 
                                 <li class="has-dropdown"><a class="menu-item menu-item {% if subTitle == 'Blog' %}
                                                                                             active1
@@ -431,22 +419,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="has-dropdown firstlvl">
-                    <a class="mm-link" href="{% url 'index' %}">Pages <i class="rt-angle-down"></i></a>
-                    <ul class="sub-menu">
-                        <li><a href="{% url 'about' %}">About</a></li>
-                        <li><a href="{% url 'faq' %}">FAQ's</a></li>
-                        <li><a href="{% url 'errorPage' %}">Error 404</a></li>
-                    </ul>
-                </li>
-                <li class="has-dropdown firstlvl">
-                    <a class="mm-link" href="{% url 'news' %}">Blog <i class="rt-angle-down"></i></a>
-                    <ul class="sub-menu">
-                        <li><a href="{% url 'news' %}">Blog</a></li>
-                        <li><a href="{% url 'newsGrid' %}">Blog Grid</a></li>
-                        <li><a href="{% url 'newsDetails' %}">Blog Details</a></li>
-                    </ul>
-                </li>
+
                 <li><a class="mm-link" href="{% url 'contact' %}">Contact</a></li>
             </ul>
         </nav>

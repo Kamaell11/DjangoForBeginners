@@ -17,7 +17,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from shoe_shop import homeViews
-from shoe_shop import pagesViews
 from shoe_shop import shopViews
 
 urlpatterns = [
@@ -43,12 +42,6 @@ urlpatterns = [
     path('simple-products', homeViews.simpleProducts, name='simpleProducts'),
     path('thankYou', homeViews.thankYou, name='thankYou'),
     path('wishlist', homeViews.wishlist, name='wishlist'),
-
-
-    # pages
-    path('about', pagesViews.about, name='about'),
-    path('error-page', pagesViews.errorPage, name='errorPage'),
-    path('faq', pagesViews.faq, name='faq'),
 
     # shop
     path('account', shopViews.account, name='account'),
