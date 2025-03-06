@@ -62,12 +62,12 @@
                         <select class="topbar-select custom-select">
                             <option value="eng">English</option>
                             <option value="esp">Español</option>
-                            <option value="ban">Bangla</option>
+                            <option value="pl">Polish</option>
                         </select>
                         <select class="topbar-select custom-select2">
                             <option value="usd">USD</option>
                             <option value="eur">Euro</option>
-                            <option value="tk">Taka</option>
+                            <option value="pln">PLN</option>
                         </select>
                     </div>
                 </div>
@@ -92,90 +92,13 @@
                                 <span class="dot9"></span>
                             </a>
                         </div>
-                        <a href="{% url 'index' %}" class="logo"><img src="/static/images/logo1.svg" alt="weiboo-logo"></a>
+                        <h3>Shoe Shop</h3>
                     </div>
                     <div class="rts-menu">
                         <nav class="menus menu-toggle">
                             <ul class="nav__menu">
-                                <li class="has-dropdown"><a class="menu-item active1" href="#">Home <i class="rt-plus"></i></a>
-                                    <ul class="dropdown-ul">
-                                        <li class="dropdown-li"><a class="dropdown-link active" href="{% url 'index' %}">Main
-                                                Home</a>
-                                        </li>
-                                        <li class="dropdown-li"><a class="dropdown-link" href="{% url 'indexTwo' %}">Fashion
-                                                Home</a>
-                                        </li>
-                                        <li class="dropdown-li"><a class="dropdown-link" href="{% url 'indexNine' %}">Fashion
-                                                Home Two</a>
-                                        </li>
-                                        <li class="dropdown-li"><a class="dropdown-link" href="{% url 'indexThree' %}">Furniture
-                                                Home</a>
-                                        </li>
-                                        <li class="dropdown-li"><a class="dropdown-link" href="{% url 'indexFour' %}">Decor
-                                                Home</a>
-                                        </li>
-                                        <li class="dropdown-li"><a class="dropdown-link" href="{% url 'indexFive' %}">Electronics
-                                                Home</a>
-                                        </li>
-                                        <li class="dropdown-li"><a class="dropdown-link" href="{% url 'indexSix' %}">Grocery
-                                                Home</a>
-                                        </li>
-                                        <li class="dropdown-li"><a class="dropdown-link" href="{% url 'indexSeven' %}">Footwear
-                                                Home</a>
-                                        </li>
-                                        <li class="dropdown-li"><a class="dropdown-link" href="{% url 'indexEight' %}">Gaming
-                                                Home</a>
-                                        </li>
-                                        <li class="dropdown-li"><a class="dropdown-link" href="{% url 'indexTen' %}">Sunglass
-                                                Home</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="has-dropdown"><a class="menu-item" href="#">Shop <i class="rt-plus"></i></a>
-                                    <ul class="dropdown-ul mega-dropdown">
-                                        <li class="mega-dropdown-li">
-                                            <ul class="mega-dropdown-ul">
-                                                <li class="dropdown-li"><a class="dropdown-link2" href="{% url 'shop' %}">Shop</a>
-                                                </li>
-                                                <li class="dropdown-li"><a class="dropdown-link2" href="{% url 'sidebarLeft' %}">Left Sidebar Shop</a>
-                                                </li>
-                                                <li class="dropdown-li"><a class="dropdown-link2" href="{% url 'sidebarRight' %}">Right Sidebar Shop</a>
-                                                </li>
-                                                <li class="dropdown-li"><a class="dropdown-link2" href="{% url 'fullWidthShop' %}">Full Width Shop</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li class="mega-dropdown-li">
-                                            <ul class="mega-dropdown-ul">
-                                                <li class="dropdown-li"><a class="dropdown-link2" href="{% url 'productDetails' %}">Single Product Layout One</a>
-                                                </li>
-                                                <li class="dropdown-li"><a class="dropdown-link2" href="{% url 'productDetails2' %}">Single Product Layout Two</a>
-                                                </li>
-                                                <li class="dropdown-li"><a class="dropdown-link2" href="{% url 'variableProducts' %}">Variable
-                                                        Product</a>
-                                                </li>
-                                                <li class="dropdown-li"><a class="dropdown-link2" href="{% url 'groupedProducts' %}">Grouped
-                                                        Product</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li class="mega-dropdown-li last-child">
-                                            <ul class="mega-dropdown-ul">
-                                                <li class="dropdown-li"><a class="dropdown-link2" href="{% url 'cart' %}">Cart</a>
-                                                </li>
-
-                                                <li class="dropdown-li"><a class="dropdown-link2" href="{% url 'checkOut' %}">Checkout</a>
-                                                </li>
-                                                <li class="dropdown-li"><a class="dropdown-link2" href="{% url 'account' %}">My Account</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                       
-
-                           
-                       
+                                <a class="menu-item active1" href="#">Home <i class="rt-plus"></i></a>
+                                <a class="menu-item" href="#">Shop <i class="rt-plus"></i></a>
                             </ul>
                         </nav>
                     </div>
@@ -221,7 +144,6 @@
     </div>
     <div class="cart-bar">
         <div class="cart-header">
-            <h3 class="cart-heading">MY CART (3 ITEMS)</h3>
             <div class="close-cart"><i class="fal fa-times"></i></div>
         </div>
         <div class="product-area">
@@ -358,15 +280,8 @@
                     <a class="mm-link" href="{% url 'index' %}">Home <i class="rt-angle-down"></i></a>
                     <ul class="sub-menu">
                         <li><a href="{% url 'index' %}">Main Home</a></li>
-                        <li><a href="{% url 'indexTwo' %}">Fashion Home</a></li>
-                        <li><a href="{% url 'indexNine' %}">Fashion Home Two</a></li>
-                        <li><a href="{% url 'indexThree' %}">Furniture Home</a></li>
-                        <li><a href="{% url 'indexFour' %}">Decor Home</a></li>
-                        <li><a href="{% url 'indexFive' %}">Electronics Home</a></li>
-                        <li><a href="{% url 'indexSix' %}">Grocery Home</a></li>
                         <li><a href="{% url 'indexSeven' %}">Footwear Home</a></li>
-                        <li><a href="{% url 'indexEight' %}">Gaming Home</a></li>
-                        <li><a href="{% url 'indexTen' %}">Sunglass Home</a></li>
+                     
                     </ul>
                 </li>
                 <li class="has-dropdown firstlvl">
@@ -470,15 +385,8 @@
                                 <h2 class="widget-title">All Categories <i class="rt-angle-down"></i></h2>
                                 <nav>
                                     <ul>
-                                        <li><a href="{% url 'shop' %}">Activewear <i class="rt rt-arrow-right-long"></i></a></li>
-                                        <li><a href="{% url 'shop' %}">Bikinis <i class="rt rt-arrow-right-long"></i></a></li>
-                                        <li><a href="{% url 'shop' %}">Dresses <i class="rt rt-arrow-right-long"></i></a></li>
-                                        <li><a href="{% url 'shop' %}">Jumpsuits <i class="rt rt-arrow-right-long"></i></a></li>
-                                        <li><a href="{% url 'shop' %}">Smart Dress <i class="rt rt-arrow-right-long"></i></a></li>
                                         <li><a href="{% url 'shop' %}">Sneakers <i class="rt rt-arrow-right-long"></i></a></li>
-                                        <li><a href="{% url 'shop' %}">Sweetshirts <i class="rt rt-arrow-right-long"></i></a></li>
-                                        <li><a href="{% url 'shop' %}">Trousers <i class="rt rt-arrow-right-long"></i></a></li>
-                                        <li><a href="{% url 'shop' %}">Furniture <i class="rt rt-arrow-right-long"></i></a></li>
+                                        <li><a href="{% url 'shop' %}">rest of categories <i class="rt rt-arrow-right-long"></i></a></li>
                                     </ul>
                                 </nav>
                             </div>
@@ -1022,7 +930,7 @@
                                 <i class="far fa-star"></i>
                                 <i class="far fa-star"></i>
                             </div>
-                            <a href="{% url 'productDetails' %}" class="product-name">Hanes Women's Bra</a>
+                            <a href="{% url 'productDetails' %}" class="product-name">Hanes Women's Shoes</a>
                             <div class="action-wrap">
                                 <span class="price">$31.00</span>
                             </div>
@@ -1082,7 +990,7 @@
             <div class="col-xl-3 col-lg-6 col-sm-6 col-12">
                 <a href="{% url 'productDetails' %}" class="product-box product-box-medium product-box-medium3">
                     <div class="contents">
-                        <span class="pretitle">SUMMER DRESS</span>
+                        <span class="pretitle">SUMMER Shoes</span>
                         <h1 class="product-title">BEST COLLECTION</h1>
                         <div class="view-collections go-btn">Shop Now <i class="rt-arrow-right-long"></i></div>
                     </div>
@@ -1156,7 +1064,7 @@
                                 <span class="month">Jul</span>
                             </span>
                             <ul class="blog-meta">
-                                <li><a href="#">WINTER DRESS</a></li>
+                                <li><a href="#">WINTER Shoes</a></li>
                             </ul>
                             <div class="title">
                                 <a href="#">Once that’s determined with a good, you need to come up with a name</a>
