@@ -278,58 +278,11 @@
             <ul id="mobile-menu-active">
                 <li class="has-dropdown firstlvl">
                     <a class="mm-link" href="{% url 'index' %}">Home <i class="rt-angle-down"></i></a>
-                    <ul class="sub-menu">
-                        <li><a href="{% url 'index' %}">Main Home</a></li>
-                        <li><a href="{% url 'indexSeven' %}">Footwear Home</a></li>
-                     
-                    </ul>
+
                 </li>
                 <li class="has-dropdown firstlvl">
                     <a class="mm-link" href="{% url 'shop' %}">Shop <i class="rt-angle-down"></i></a>
-                    <ul class="sub-menu mega-dropdown-mobile">
-                        <li class="mega-dropdown-li">
-                            <ul class="mega-dropdown-ul mm-show">
-                                <li class="dropdown-li"><a class="dropdown-link" href="{% url 'shop' %}">Shop</a>
-                                </li>
-                                <li class="dropdown-li"><a class="dropdown-link" href="{% url 'sidebarLeft' %}">Left Sidebar
-                                        Shop</a>
-                                </li>
-                                <li class="dropdown-li"><a class="dropdown-link" href="{% url 'sidebarRight' %}">Right Sidebar
-                                        Shop</a>
-                                </li>
-                                <li class="dropdown-li"><a class="dropdown-link" href="{% url 'fullWidthShop' %}">Full
-                                        Width Shop</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="mega-dropdown-li">
-                            <ul class="mega-dropdown-ul mm-show">
-                                <li class="dropdown-li"><a class="dropdown-link" href="{% url 'productDetails' %}">Single Product
-                                        Layout
-                                        One</a>
-                                </li>
-                                <li class="dropdown-li"><a class="dropdown-link" href="{% url 'productDetails2' %}">Single Product Layout
-                                        Two</a>
-                                </li>
-                                <li class="dropdown-li"><a class="dropdown-link" href="{% url 'variableProducts' %}">Variable Product</a>
-                                </li>
-                                <li class="dropdown-li"><a class="dropdown-link" href="{% url 'groupedProducts' %}">Grouped Product</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="mega-dropdown-li">
-                            <ul class="mega-dropdown-ul mm-show">
-                                <li class="dropdown-li"><a class="dropdown-link" href="{% url 'cart' %}">Cart
-                                    </a>
-                                </li>
-                                <li class="dropdown-li"><a class="dropdown-link" href="{% url 'checkOut' %}">Checkout</a>
-                                </li>
-                                <li class="dropdown-li"><a class="dropdown-link" href="{% url 'account' %}">My
-                                        Account</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
+     
                 </li>
 
       
@@ -383,12 +336,22 @@
                         <div class="catagory-sidebar">
                             <div class="widget-bg">
                                 <h2 class="widget-title">All Categories <i class="rt-angle-down"></i></h2>
-                                <nav>
-                                    <ul>
-                                        <li><a href="{% url 'shop' %}">Sneakers <i class="rt rt-arrow-right-long"></i></a></li>
-                                        <li><a href="{% url 'shop' %}">rest of categories <i class="rt rt-arrow-right-long"></i></a></li>
-                                    </ul>
-                                </nav>
+                                    <nav>
+                                        <ul>
+                                            <!-- Debug: Print categories -->
+                                            {% if categories %}
+                                                {% for category in categories %}
+                                                    <li>
+                                                        <a href="{% url 'category_detail' category.id %}">
+                                                            {{ category.name }} <i class="rt rt-arrow-right-long"></i>
+                                                        </a>
+                                                    </li>
+                                                {% endfor %}
+                                            {% else %}
+                                                <li>No categories found.</li>
+                                            {% endif %}
+                                        </ul>
+                                    </nav>
                             </div>
                         </div>
                     </div>

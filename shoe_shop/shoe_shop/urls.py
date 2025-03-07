@@ -15,26 +15,20 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include 
+from django.conf import settings
+from django.conf.urls.static import static
 from shoe_shop import homeViews
 from shop import views as shopViews
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
+    path('', include('shop.urls')),
     path('', homeViews.index, name ='index'),
     path('all-category', homeViews.allCategory, name='allCategory'),
     path('category', homeViews.category, name='category'),
     path('external-products', homeViews.externalProducts, name='externalProducts'),
     path('index', homeViews.index, name='index'),
-    path('index-eight', homeViews.indexEight, name='indexEight'),
-    path('index-five', homeViews.indexFive, name='indexFive'),
-    path('index-four', homeViews.indexFour, name='indexFour'),
-    path('index-nine', homeViews.indexNine, name='indexNine'),
-    path('index-seven', homeViews.indexSeven, name='indexSeven'),
-    path('index-six', homeViews.indexSix, name='indexSix'),
-    path('index-ten', homeViews.indexTen, name='indexTen'),
-    path('index-three', homeViews.indexThree, name='indexThree'),
     path('index-two', homeViews.indexTwo, name='indexTwo'),
     path('login', homeViews.login, name='login'),
     path('out-of-stock-products', homeViews.outOfStockProducts, name='outOfStockProducts'),
@@ -57,3 +51,6 @@ urlpatterns = [
     path('variable-products', shopViews.variableProducts, name='variableProducts'),
 
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

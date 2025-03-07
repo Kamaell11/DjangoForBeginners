@@ -1,7 +1,38 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from .models import Category, Shoe
+
 
 def home(request):
-    return render(request, 'home/index.html')
+    # Fetch all categories
+    categories = Category.objects.all()
+    # Fetch featured shoes (products)
+    featured_shoes = Shoe.objects.filter(is_featured=True)[:6]  # Limit to 6 featured shoes
+
+    return render(request, 'home/index.html', {
+        'categories': categories,  # Pass categories to the template
+        'featured_shoes': featured_shoes,  # Pass featured shoes to the template
+        'footer': True,  # Dodaj tę linię, aby przekazać zmienną `footer`
+    })
+
+def category_detail(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    shoes_in_category = Shoe.objects.filter(category=category)
+    return render(request, 'home/category.html', {
+        'category': category,
+        'shoes': shoes_in_category,
+    })
+
+def product_details(request, shoe_id):
+    shoe = get_object_or_404(Shoe, id=shoe_id)
+    return render(request, 'shop/productDetails.html', {
+        'shoe': shoe,
+    })
+
+def shoe_detail(request, shoe_id):
+    shoe = get_object_or_404(Shoe, id=shoe_id)
+    return render(request, 'shop/productDetails.html', {
+        'shoe': shoe,
+    })
 
 def account(request):     
       data = {

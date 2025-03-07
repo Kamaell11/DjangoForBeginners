@@ -2,14 +2,10 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('indexEight', views.indexEight, name='indexEight'),
-    path('indexFive', views.indexFive, name='indexFive'),
-    path('indexFour', views.indexFour, name='indexFour'),
-    path('indexNine', views.indexNine, name='indexNine'),
-    path('indexSeven', views.indexSeven, name='indexSeven'),
-    path('indexSix', views.indexSix, name='indexSix'),
-    path('indexTen', views.indexTen, name='indexTen'),
-    path('indexThree', views.indexThree, name='indexThree'),
-    path('indexTwo', views.indexTwo, name='indexTwo'),
+    path('', views.home, name='home'),
+    path('category/<int:category_id>/', views.category_detail, name='category_detail'),
+    path('shoe/<int:shoe_id>/', views.shoe_detail, name='shoe_detail'),
+    path('category/<int:category_id>/', views.category_detail, name='category_detail'),
+    path('product/<int:shoe_id>/', views.product_details, name='productDetails')
+    
 ]
