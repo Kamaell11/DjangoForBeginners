@@ -4,12 +4,13 @@ from .models import Category, Shoe
 
 def home(request):
     categories = Category.objects.all()
-    featured_products = Shoe.objects.filter(is_featured=True)[:4]  # Limit to 6 featured shoes
-    
+    featured_products = Shoe.objects.filter(is_featured=True)[:4]  # get 4 featured products
     print(featured_products)
     return render(request, 'home/index.html', {
         'categories': categories,  
         'featured_products': featured_products, 
+        'banner': True,
+        'title': 'Strona główna',
         'footer': True, 
     })
 
@@ -25,6 +26,8 @@ def product_details(request, shoe_id):
     shoe = get_object_or_404(Shoe, id=shoe_id)
     return render(request, 'shop/productDetails.html', {
         'shoe': shoe,
+        'title': True,
+        'footer': True,
     })
 
 

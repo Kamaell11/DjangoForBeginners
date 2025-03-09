@@ -1,36 +1,42 @@
 <!DOCTYPE html>
 <html lang="en" class="darkmode" data-theme="light">
 
-{% include  '../partials/head.html' with css=css %}
+{% include '../partials/head.html' with css=css %}
 
 <body>
     
     <!-- ..::Preloader Section Start Here::.. -->
-    {% include  '../partials/preloader.html' %}
+    {% include '../partials/preloader.html' %}
     <!-- ..::Preloader End Here::.. -->
 
     <div class="anywere"></div>
 
-        {% if title %}
-        {% include  '../partials/header.html' %}
-        {% endif %}
+    <!-- Header -->
+    {% if title %}
+        {% include '../partials/header.html' %}
+    {% endif %}
 
-        {% block content %}
+    <!-- Banner (opcjonalnie) -->
+    {% if banner %}
+        {% include '../partials/banner.html' %}
+    {% endif %}
 
-        
-        {% endblock %} 
+    <!-- Główna zawartość strony -->
+    {% block content %}
+    {% endblock %}
 
-        {% if footer %}
-        {% include  '../partials/footer.html' %}
-        {% endif %}
+    <!-- Stopka -->
+    {% if footer %}
+        {% include '../partials/footer.html' %}
+    {% endif %}
 
-    {% include  '../partials/scroll.html' %}
+    <!-- Skrypty i dodatkowe elementy -->
+    {% include '../partials/scroll.html' %}
+    {% include '../partials/script.html' with script=script %}
 
-    {% include  '../partials/script.html' with script=script %}
-
+    <!-- Dodatkowe skrypty specyficzne dla strony -->
     {% block script %}
-
-    {% endblock %}  
+    {% endblock %}
 
 </body>
 
