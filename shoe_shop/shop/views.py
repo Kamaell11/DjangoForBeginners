@@ -3,15 +3,14 @@ from .models import Category, Shoe
 
 
 def home(request):
-    # Fetch all categories
     categories = Category.objects.all()
-    # Fetch featured shoes (products)
-    featured_shoes = Shoe.objects.filter(is_featured=True)[:6]  # Limit to 6 featured shoes
-
+    featured_products = Shoe.objects.filter(is_featured=True)[:4]  # Limit to 6 featured shoes
+    
+    print(featured_products)
     return render(request, 'home/index.html', {
-        'categories': categories,  # Pass categories to the template
-        'featured_shoes': featured_shoes,  # Pass featured shoes to the template
-        'footer': True,  # Dodaj tę linię, aby przekazać zmienną `footer`
+        'categories': categories,  
+        'featured_products': featured_products, 
+        'footer': True, 
     })
 
 def category_detail(request, category_id):
@@ -28,11 +27,18 @@ def product_details(request, shoe_id):
         'shoe': shoe,
     })
 
-def shoe_detail(request, shoe_id):
-    shoe = get_object_or_404(Shoe, id=shoe_id)
-    return render(request, 'shop/productDetails.html', {
-        'shoe': shoe,
-    })
+
+import random
+
+def featured_shoes(request):
+    featured_products = Shoe.objects.filter(is_featured=True)
+
+    featured_products = random.sample(list(featured_products), min(len(featured_products), 4))
+
+    context = {
+        'featured_products': featured_products,
+    }
+    return render(request, 'home/featured_product.html', context)
 
 def account(request):     
       data = {
