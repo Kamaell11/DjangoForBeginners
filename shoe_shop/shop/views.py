@@ -1,12 +1,14 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Category, Shoe
-
+from django.core.paginator import Paginator
+from django.db.models import Count
 
 def home(request):
     categories = Category.objects.all()
-    featured_products = Shoe.objects.filter(is_featured=True)[:4]  # get 4 featured products
 
-    # Pobierz pierwszy but z każdej kategorii
+    categories = Category.objects.annotate(product_count=Count('shoe'))
+    featured_products = Shoe.objects.filter(is_featured=True)[:4]  
+
     category_shoes = {}
     for category in categories:
         first_shoe = Shoe.objects.filter(category=category).first()
@@ -21,13 +23,51 @@ def home(request):
         'title': 'Strona główna',
         'footer': True, 
     })
+
+
 def category_detail(request, category_id):
     category = get_object_or_404(Category, id=category_id)
+    
     shoes_in_category = Shoe.objects.filter(category=category)
-    return render(request, 'home/category.html', {
-        'category': category,
-        'shoes': shoes_in_category,
-    })
+
+    sort_by = request.GET.get("sort_by", "")
+    min_price = request.GET.get("min_price", "")
+    max_price = request.GET.get("max_price", "")
+
+    if sort_by == "price_asc":
+        shoes_in_category = shoes_in_category.order_by("price")
+    elif sort_by == "price_desc":
+        shoes_in_category = shoes_in_category.order_by("-price")
+    elif sort_by == "latest":
+        shoes_in_category = shoes_in_category.order_by("-created_at")  
+
+
+    if min_price and max_price:
+        try:
+            min_price = float(min_price)
+            max_price = float(max_price)
+            shoes_in_category = shoes_in_category.filter(price__gte=min_price, price__lte=max_price)
+        except ValueError:
+            pass 
+
+    paginator = Paginator(shoes_in_category, 12)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    categories = Category.objects.annotate(product_count=Count("shoe"))
+
+    return render(
+        request,
+        "home/category.html",
+        {
+            "category": category,
+            "shoes": page_obj,  
+            "categories": categories, 
+            "title": category.name,
+            "footer": True,
+        },
+    )
+
 
 def product_details(request, shoe_id):
     shoe = get_object_or_404(Shoe, id=shoe_id)

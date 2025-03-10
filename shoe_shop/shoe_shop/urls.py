@@ -49,6 +49,8 @@ urlpatterns = [
     path('sidebar-right', shopViews.sidebarRight, name='sidebarRight'),
     path('variable-products', shopViews.variableProducts, name='variableProducts'),
 
+    # cart
+    path('cart/', include('cart.urls')),
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,106 @@
+{% extends '../layout/layout.html' %}
+
+{% block script %}
+    <script src="/static/js/vendors/zoom.js"></script> 
+{% endblock %} 
+
+{% block content %}
+
+<!-- ..::Cart Section Start Here::.. -->
+<div class="rts-cart-section">
+    <div class="container">
+        <h4 class="section-title">Product List</h4>
+        <div class="row justify-content-between">
+            <div class="col-xl-7">
+                <div class="cart-table-area">
+                    <table class="table table-bordered table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Product</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in cart.items.all %}
+                                <tr>
+                                    <td>
+                                        <div class="product-thumb">
+                                            <img src="{{ item.shoe.image.url }}" alt="{{ item.shoe.name }}">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="product-title-area">
+                                            <span class="pretitle">{{ item.shoe.category.name }}</span>
+                                            <h4 class="product-title">{{ item.shoe.name }}</h4>
+                                        </div>
+                                    </td>
+                                    <td><span class="product-price">${{ item.shoe.price|floatformat:2 }}</span></td>
+                                    <td>
+                                        <div class="cart-edit">
+                                            <div class="quantity-edit">
+                                                <button class="button minus" data-item-id="{{ item.id }}"><i class="fal fa-minus"></i></button>
+                                                <input type="text" class="input" value="{{ item.quantity }}" data-item-id="{{ item.id }}">
+                                                <button class="button plus" data-item-id="{{ item.id }}"><i class="fal fa-plus"></i></button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="last-td">
+                                        <a href="{% url 'cart:remove_from_cart' item.id %}" class="remove-btn">Remove</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="coupon-apply">
+                        <span class="coupon-text">Coupon Code:</span>
+                        <div class="apply-input">
+                            <input type="text" placeholder="Apply coupon here">
+                            <button type="submit" class="apply-btn">Apply</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4">
+                <div class="checkout-box">
+                    <div class="checkout-box-inner">
+                        <div class="subtotal-area">
+                            <span class="title">Subtotal</span>
+                            <span class="subtotal-price">${{ cart.get_total_price|floatformat:2 }}</span>
+                        </div>
+                        <div class="shipping-check">
+                            <span class="title">Shipping</span>
+                            <div class="check-options">
+                                <form>
+                                    <div class="form-group">
+                                        <input type="checkbox" id="fltrt">
+                                        <label class="check-title" for="fltrt">Flat rate</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="checkbox" id="frsh">
+                                        <label class="check-title" for="frsh">Free shipping</label>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="shipping-location">
+                            <span class="shipping-to">Shipping to <span>NY.</span></span>
+                            <span class="change-address"><i class="fal fa-map-marker-alt mr--5"></i>Change address</span>
+                        </div>
+                        <div class="total-area">
+                            <span class="title">Total</span>
+                            <span class="total-price">${{ cart.get_total_price|floatformat:2 }}</span>
+                        </div>
+                    </div>
+                    <a href="{% url 'checkOut' %}" class="procced-btn">Proceed To Checkout</a>
+                    <a href="{% url 'shop' %}" class="continue-shopping"><i class="fal fa-long-arrow-left"></i> Continue Shopping</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ..::Cart Section End Here::.. -->
+
+{% endblock content %}

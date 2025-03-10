@@ -1,236 +1,127 @@
 {% extends '../layout/layout.html' %}
 
 {% block script %}
-        <script src="/static/js/vendors/jquery.nstSlider.min.js"></script> 
-        <script src="/static/js/vendors/zoom.js"></script> 
-{% endblock %} 
+    <script src="/static/js/vendors/jquery.nstSlider.min.js"></script> 
+    <script src="/static/js/vendors/zoom.js"></script> 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var minInput = document.getElementById("min_price");
+            var maxInput = document.getElementById("max_price");
+            var minOutput = document.getElementById("min_price_value");
+            var maxOutput = document.getElementById("max_price_value");
+
+            function updateValues() {
+                minOutput.textContent = minInput.value + " zł";
+                maxOutput.textContent = maxInput.value + " zł";
+            }
+
+            minInput.addEventListener("input", updateValues);
+            maxInput.addEventListener("input", updateValues);
+        });
+    </script>
+{% endblock %}
 
 {% block content %}
-
-<!-- ..::Shop Section Start Here::.. -->
 <div class="rts-shop-section section-gap">
     <div class="container">
         <div class="row">
-            <div class="col-xl-9">
-                <div class="shop-product-topbar">
-                    <span class="items-onlist">Showing 1-12 of 70 results</span>
-                    <div class="filter-area">
-                        <p class="select-area">
-                            <select class="select">
-                                <option value="*">Sort by average rating</option>
-                                <option value=".popular">Sort by popularity</option>
-                                <option value=".best-rate">Sort by latest</option>
-                                <option value=".on-sale">Sort by price: low to high</option>
-                                <option value=".featured">Sort by price: high to low</option>
-                            </select>
-                        </p>
-                    </div>
-                </div>
-                <!-- Display Products in the Category -->
-<div class="products-area products-area3">
-    <div class="row justify-content-center">
-        {% for shoe in shoes %}
-            <div class="col-xl-3 col-md-4 col-sm-6">
-                <div class="product-item product-item2 element-item3">
-                    <a href="{% url 'productDetails' shoe.id %}" class="product-image">
-                        <img src="{{ shoe.image.url }}" alt="{{ shoe.name }}">
-                    </a>
-                    <div class="bottom-content">
-                        <span class="product-category">{{ shoe.category.name }}</span>
-                        <a href="{% url 'productDetails' shoe.id %}" class="product-name">{{ shoe.name }}</a>
-                        <div class="action-wrap">
-                            <span class="product-price">${{ shoe.price }}</span>
-                            <a href="{% url 'add_to_cart' shoe.id %}" class="addto-cart">
-                                <i class="fal fa-shopping-cart"></i> Add To Cart
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-</div>
-                <div class="product-pagination-area mt--20">
-                    <button class="prev"><i class="far fa-long-arrow-left"></i></button>
-                    <button class="number active">01</button>
-                    <button class="number">02</button>
-                    <button class="skip-number">---</button>
-                    <button class="number">07</button>
-                    <button class="number">08</button>
-                    <button class="next"><i class="far fa-long-arrow-right"></i></button>
-                </div>
-            </div>
+            <!-- Sidebar -->
             <div class="col-xl-3">
                 <div class="side-sticky">
+                    <!-- Filtrowanie po cenie -->
                     <div class="shop-side-action">
                         <div class="action-item">
                             <div class="action-top">
-                                <span class="action-title">category</span>
+                                <span class="action-title">Filtruj po cenie</span>
                             </div>
-                            <div class="category-item">
-                                <div class="category-item-inner">
-                                    <div class="category-title-area">
-                                        <span class="point"></span>
-                                        <span class="category-title">Kids (10)</span>
-                                    </div>
-                                    <div class="down-icon"><i class="far fa-angle-down"></i></div>
+                            <form method="GET" class="price-filter-form">
+                                <input type="hidden" name="sort_by" value="{{ request.GET.sort_by }}">
+                                <div class="price-slider">
+                                    <label for="min_price">Min: <span id="min_price_value">{{ request.GET.min_price|default:0 }} zł</span></label>
+                                    <input type="range" name="min_price" id="min_price" min="0" max="500" value="{{ request.GET.min_price|default:0 }}" class="slider">
+                                    <label for="max_price">Max: <span id="max_price_value">{{ request.GET.max_price|default:500 }} zł</span></label>
+                                    <input type="range" name="max_price" id="max_price" min="0" max="500" value="{{ request.GET.max_price|default:500 }}" class="slider">
                                 </div>
-                                <ul class="sub-categorys">
-                                    <div class="sub-categorys-inner">
-                                        <li><span class="point"></span><a href="{% url 'shop' %}">Clothes</a></li>
-                                        <li><span class="point"></span><a href="{% url 'shop' %}">Shoes</a></li>
-                                        <li><span class="point"></span><a href="{% url 'shop' %}">Toys</a></li>
-                                    </div>
-                                </ul>
-                            </div>
-                            <div class="category-item">
-                                <div class="category-item-inner">
-                                    <div class="category-title-area">
-                                        <span class="point"></span>
-                                        <span class="category-title">Mens (23)</span>
-                                    </div>
-                                    <div class="down-icon"><i class="far fa-angle-down"></i></div>
-                                </div>
-                                <ul class="sub-categorys">
-                                    <div class="sub-categorys-inner">
-                                        <li><span class="point"></span><a href="{% url 'shop' %}">Clothes</a></li>
-                                        <li><span class="point"></span><a href="{% url 'shop' %}">Shoes</a></li>
-                                        <li><span class="point"></span><a href="{% url 'shop' %}">Glasses</a></li>
-                                        <li><span class="point"></span><a href="{% url 'shop' %}">Watches</a></li>
-                                        <li><span class="point"></span><a href="{% url 'shop' %}">Assesories</a></li>
-                                    </div>
-                                </ul>
-                            </div>
-                            <div class="category-item">
-                                <div class="category-item-inner">
-                                    <div class="category-title-area">
-                                        <span class="point"></span>
-                                        <span class="category-title">Women (14)</span>
-                                    </div>
-                                    <div class="down-icon"><i class="far fa-angle-down"></i></div>
-                                </div>
-                                <ul class="sub-categorys">
-                                    <div class="sub-categorys-inner">
-                                        <li><span class="point"></span><a href="{% url 'shop' %}">Clothes</a></li>
-                                        <li><span class="point"></span><a href="{% url 'shop' %}">Shoes</a></li>
-                                        <li><span class="point"></span><a href="{% url 'shop' %}">Glasses</a></li>
-                                        <li><span class="point"></span><a href="{% url 'shop' %}">Makeups</a></li>
-                                        <li><span class="point"></span><a href="{% url 'shop' %}">Assesories</a></li>
-                                    </div>
-                                </ul>
-                            </div>
+                                <button type="submit" class="filter-button">Filtruj</button>
+                                <a href="{% url 'category_detail' category.id %}">Anuluj</a>
+                            </form>
                         </div>
-                        <div class="action-item">
-                            <div class="action-top">
-                                <span class="action-title">Filter</span>
-                            </div>
-                            <div class="nstSlider" data-range_min="50" data-range_max="20000" data-cur_min="20"
-                                data-cur_max="10000">
+                    </div>
 
-                                <div class="bar"></div>
-                                <div class="leftGrip price-range-grip"></div>
-                                <div class="rightGrip price-range-grip"></div>
-                            </div>
-                            <div class="range-label-area">
-                                <div class="min-price d-flex">
-                                    <span class="range-lbl">Min:</span>
-                                    <span class="currency-symbol">$</span>
-                                    <div class="leftLabel price-range-label"></div>
-                                </div>
-                                <div class="min-price d-flex">
-                                    <span class="range-lbl">Max:</span>
-                                    <span class="currency-symbol">$</span>
-                                    <div class="rightLabel price-range-label"></div>
-                                </div>
-                            </div>
-                        </div>
+                    <!-- Lista kategorii -->
+                    <div class="shop-side-action">
                         <div class="action-item">
                             <div class="action-top">
-                                <span class="action-title">Color</span>
+                                <span class="action-title">Kategorie</span>
                             </div>
-                            <div class="color-item">
-                                <div class="color black"><i class="fas fa-check"></i></div>
-                                <span class="color-name">Black</span>
-                                <div class="color-arrow"><i class="far fa-long-arrow-right"></i></div>
-                            </div>
-                            <div class="color-item">
-                                <div class="color blue"><i class="fas fa-check"></i></div>
-                                <span class="color-name">blue</span>
-                                <div class="color-arrow"><i class="far fa-long-arrow-right"></i></div>
-                            </div>
-                            <div class="color-item selected">
-                                <div class="color gray"><i class="fas fa-check"></i></div>
-                                <span class="color-name">Gray</span>
-                                <div class="color-arrow"><i class="far fa-long-arrow-right"></i></div>
-                            </div>
-                            <div class="color-item">
-                                <div class="color green"><i class="fas fa-check"></i></div>
-                                <span class="color-name">Green</span>
-                                <div class="color-arrow"><i class="far fa-long-arrow-right"></i></div>
-                            </div>
-                            <div class="color-item">
-                                <div class="color red"><i class="fas fa-check"></i></div>
-                                <span class="color-name">Red</span>
-                                <div class="color-arrow"><i class="far fa-long-arrow-right"></i></div>
-                            </div>
-                            <div class="color-item">
-                                <div class="color yellow"><i class="fas fa-check"></i></div>
-                                <span class="color-name">Yellow</span>
-                                <div class="color-arrow"><i class="far fa-long-arrow-right"></i></div>
-                            </div>
+                            <ul class="category-list">
+                                {% for cat in categories %}
+                                    <li>
+                                        <a href="{% url 'category_detail' cat.id %}">
+                                            {{ cat.name }} ({{ cat.product_count }})
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
                         </div>
-                        <div class="action-item">
-                            <div class="action-top">
-                                <span class="action-title">Brand</span>
-                            </div>
-                            <div class="product-brands">
-                                <div class="brands-inner">
-                                    <ul>
-                                        <li><a class="product-brand" href="{% url 'shop' %}">Alexander McQueen</a></li>
-                                        <li><a class="product-brand" href="{% url 'shop' %}">Adidas</a></li>
-                                        <li><a class="product-brand" href="{% url 'shop' %}">Balenciaga</a></li>
-                                        <li><a class="product-brand" href="{% url 'shop' %}">Balmain</a></li>
-                                        <li><a class="product-brand" href="{% url 'shop' %}">Burberry</a></li>
-                                        <li><a class="product-brand" href="{% url 'shop' %}">Chloé</a></li>
-                                        <li><a class="product-brand" href="{% url 'shop' %}">Dsquared2</a></li>
-                                        <li><a class="product-brand" href="{% url 'shop' %}">Givenchy</a></li>
-                                        <li><a class="product-brand" href="{% url 'shop' %}">Kenzo</a></li>
-                                        <li><a class="product-brand" href="{% url 'shop' %}">Leo</a></li>
-                                        <li><a class="product-brand" href="{% url 'shop' %}">Maison Margiela</a></li>
-                                        <li><a class="product-brand" href="{% url 'shop' %}">Moschino</a></li>
-                                        <li><a class="product-brand" href="{% url 'shop' %}">Nike</a></li>
-                                        <li><a class="product-brand" href="{% url 'shop' %}">Versace</a></li>
-                                        <li><a class="product-brand" href="{% url 'shop' %}">Alexander McQueen</a></li>
-                                        <li><a class="product-brand" href="{% url 'shop' %}">Adidas</a></li>
-                                        <li><a class="product-brand" href="{% url 'shop' %}">Balenciaga</a></li>
-                                        <li><a class="product-brand" href="{% url 'shop' %}">Balmain</a></li>
-                                        <li><a class="product-brand" href="{% url 'shop' %}">Burberry</a></li>
-                                        <li><a class="product-brand" href="{% url 'shop' %}">Chloé</a></li>
-                                        <li><a class="product-brand" href="{% url 'shop' %}">Dsquared2</a></li>
-                                        <li><a class="product-brand" href="{% url 'shop' %}">Givenchy</a></li>
-                                        <li><a class="product-brand" href="{% url 'shop' %}">Kenzo</a></li>
-                                        <li><a class="product-brand" href="{% url 'shop' %}">Leo</a></li>
-                                        <li><a class="product-brand" href="{% url 'shop' %}">Maison Margiela</a></li>
-                                        <li><a class="product-brand" href="{% url 'shop' %}">Moschino</a></li>
-                                        <li><a class="product-brand" href="{% url 'shop' %}">Nike</a></li>
-                                        <li><a class="product-brand" href="{% url 'shop' %}">Versace</a></li>
-                                    </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Główna zawartość -->
+            <div class="col-xl-9">
+                <div class="shop-product-topbar">
+                    <span class="items-onlist">
+                        Pokazano {{ shoes.start_index }}-{{ shoes.end_index }} z {{ shoes.paginator.count }} wyników
+                    </span>
+
+                    <div class="filter-area">
+                        <form method="GET" id="sortForm">
+                            <select name="sort_by" id="sortSelect">
+                                <option value="">Sortuj według</option>
+                                <option value="price_asc" {% if request.GET.sort_by == "price_asc" %}selected{% endif %}>Cena: rosnąco</option>
+                                <option value="price_desc" {% if request.GET.sort_by == "price_desc" %}selected{% endif %}>Cena: malejąco</option>
+                                <option value="latest" {% if request.GET.sort_by == "latest" %}selected{% endif %}>Najnowsze</option>
+                            </select>
+                        </form>
+                    </div>
+
+                    <script>
+                        document.getElementById('sortSelect').addEventListener('change', function() {
+                            document.getElementById('sortForm').submit();
+                        });
+                    </script>
+                </div>
+
+                <!-- Wyświetlanie produktów -->
+                <div class="products-area products-area3">
+                    <div class="row justify-content-center">
+                        {% for shoe in shoes %}
+                            <div class="col-xl-3 col-md-4 col-sm-6">
+                                <div class="product-item product-item2 element-item3">
+                                    <a href="{% url 'productDetails' shoe.id %}" class="product-image">
+                                        <img src="{{ shoe.image.url }}" alt="{{ shoe.name }}">
+                                    </a>
+                                    <div class="bottom-content">
+                                        <span class="product-category">{{ shoe.category.name }}</span>
+                                        <a href="{% url 'productDetails' shoe.id %}" class="product-name">{{ shoe.name }}</a>
+                                        <div class="action-wrap">
+                                            <span class="product-price">{{ shoe.price }} zł</span>
+                                            <a href="{% url 'cart:add_to_cart' shoe.id %}" class="addto-cart">
+                                                <i class="fal fa-shopping-cart"></i> Dodaj do koszyka
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <a href="{% url 'shop' %}" class="banner-item">
-                            <div class="banner-inner">
-                                <span class="pretitle">Winter Fashion</span>
-                                <h1 class="title">Behind the
-                                    deseart</dih1v>
-                            </div>
-                        </a>
+                        {% empty %}
+                            <p>Brak produktów w tej kategorii.</p>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- ..::Shop Section Section End Here::.. -->
 
 {% endblock content %}

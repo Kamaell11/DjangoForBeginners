@@ -15,5 +15,8 @@ class Shoe(models.Model):
     image = models.ImageField(upload_to='shoes/', blank=True, null=True)
     stock = models.PositiveIntegerField(default=0)
     is_featured = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
     def __str__(self):
         return self.name
