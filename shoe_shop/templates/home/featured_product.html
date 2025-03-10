@@ -47,7 +47,10 @@
                                 <a href="{% url 'wishlist' %}"><i class="far fa-heart"></i></a>
                             </div>
                             <div class="cta-single cta-addtocart">
-                                <a href="{% url 'cart' %}"><i class="rt-basket-shopping"></i></a>
+                                <form action="{% url 'cart:add_to_cart' shoe.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit"><i class="rt-basket-shopping"></i> </button>
+                                </form>
                             </div>
                         </div>
                         {% if shoe.discount %}

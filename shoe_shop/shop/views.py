@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from .models import Category, Shoe
 from django.core.paginator import Paginator
 from django.db.models import Count
+from cart.models import Cart, CartItem
 
 def home(request):
     categories = Category.objects.all()
@@ -15,6 +16,16 @@ def home(request):
         if first_shoe:
             category_shoes[category.name] = first_shoe
 
+    cart_item_count = 0
+    if request.user.is_authenticated:
+        cart = Cart.objects.filter(user=request.user).first()
+        if cart:
+            cart_item_count = CartItem.objects.filter(cart=cart).count()
+    else:
+        # Jeśli użytkownik nie jest zalogowany, możemy użyć sesji (jeśli wcześniej zapisano liczbę przedmiotów)
+        cart_item_count = request.session.get('cart_item_count', 0)
+
+
     return render(request, 'home/index.html', {
         'categories': categories,  
         'featured_products': featured_products, 
@@ -22,6 +33,7 @@ def home(request):
         'banner': True,
         'title': 'Strona główna',
         'footer': True, 
+        'cart_item_count': cart_item_count, 
     })
 
 
@@ -56,6 +68,15 @@ def category_detail(request, category_id):
 
     categories = Category.objects.annotate(product_count=Count("shoe"))
 
+
+    cart_item_count = 0
+    if request.user.is_authenticated:
+        cart = Cart.objects.filter(user=request.user).first()
+        if cart:
+            cart_item_count = CartItem.objects.filter(cart=cart).count()
+    else:
+        # Jeśli użytkownik nie jest zalogowany, możemy użyć sesji (jeśli wcześniej zapisano liczbę przedmiotów)
+        cart_item_count = request.session.get('cart_item_count', 0)
     return render(
         request,
         "home/category.html",
@@ -65,16 +86,26 @@ def category_detail(request, category_id):
             "categories": categories, 
             "title": category.name,
             "footer": True,
+            'cart_item_count': cart_item_count, 
         },
     )
 
 
 def product_details(request, shoe_id):
     shoe = get_object_or_404(Shoe, id=shoe_id)
+    cart_item_count = 0
+    if request.user.is_authenticated:
+        cart = Cart.objects.filter(user=request.user).first()
+        if cart:
+            cart_item_count = CartItem.objects.filter(cart=cart).count()
+    else:
+        # Jeśli użytkownik nie jest zalogowany, możemy użyć sesji (jeśli wcześniej zapisano liczbę przedmiotów)
+        cart_item_count = request.session.get('cart_item_count', 0)
     return render(request, 'shop/productDetails.html', {
         'shoe': shoe,
         'title': True,
         'footer': True,
+        'cart_item_count': cart_item_count, 
     })
 
 

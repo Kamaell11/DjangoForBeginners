@@ -39,7 +39,6 @@ urlpatterns = [
 
     # shop
     path('account', shopViews.account, name='account'),
-    path('cart', shopViews.cart, name='cart'),
     path('check-out', shopViews.checkOut, name='checkOut'),
     path('full-width-shop', shopViews.fullWidthShop, name='fullWidthShop'),
     path('grouped-products', shopViews.groupedProducts, name='groupedProducts'),
