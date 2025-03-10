@@ -44,7 +44,6 @@ urlpatterns = [
     path('full-width-shop', shopViews.fullWidthShop, name='fullWidthShop'),
     path('grouped-products', shopViews.groupedProducts, name='groupedProducts'),
     path('product-details', shopViews.productDetails, name='productDetails'),
-    path('product-details2', shopViews.productDetails2, name='productDetails2'),
     path('shop', shopViews.shop, name='shop'),
     path('sidebar-left', shopViews.sidebarLeft, name='sidebarLeft'),
     path('sidebar-right', shopViews.sidebarRight, name='sidebarRight'),

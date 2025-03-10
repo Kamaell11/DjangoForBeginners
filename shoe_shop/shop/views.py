@@ -5,15 +5,22 @@ from .models import Category, Shoe
 def home(request):
     categories = Category.objects.all()
     featured_products = Shoe.objects.filter(is_featured=True)[:4]  # get 4 featured products
-    print(featured_products)
+
+    # Pobierz pierwszy but z każdej kategorii
+    category_shoes = {}
+    for category in categories:
+        first_shoe = Shoe.objects.filter(category=category).first()
+        if first_shoe:
+            category_shoes[category.name] = first_shoe
+
     return render(request, 'home/index.html', {
         'categories': categories,  
         'featured_products': featured_products, 
+        'category_shoes': category_shoes,  
         'banner': True,
         'title': 'Strona główna',
         'footer': True, 
     })
-
 def category_detail(request, category_id):
     category = get_object_or_404(Category, id=category_id)
     shoes_in_category = Shoe.objects.filter(category=category)
@@ -107,15 +114,6 @@ def productDetails(request):
       }
       return render(request, "shop/productDetails.html", data)
 
-def productDetails2(request):     
-      data = {
-       'title':'Product',
-       'subTitle':'Shop',
-       'subTitle2':'Product',
-       'footer':'true',
-       'script':'<script src="/static/js/vendors/zoom.js"></script> ',
-      }
-      return render(request, "shop/productDetails2.html", data)
 
 def shop(request):     
       data = {
