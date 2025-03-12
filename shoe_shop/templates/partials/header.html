@@ -109,7 +109,19 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="{% url 'login' %}" class="account"><i class="rt-user-2"></i></a>
+                        <div class="auth-buttons">
+                            {% if user.is_authenticated %}
+                                <!-- Jeśli użytkownik jest zalogowany -->
+                                <a href="{% url 'account' %}" class="btn btn-account">Moje konto</a>
+                                <form action="{% url 'logout' %}" method="post" class="logout-form">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-logout">Wyloguj</button>
+                                </form>
+                            {% else %}
+                                <!-- Jeśli użytkownik nie jest zalogowany -->
+                                <a href="{% url 'login' %}" class="btn btn-login">Zaloguj się</a>
+                            {% endif %}
+                        </div>
                         <div class="cart action-item">
                             <div class="cart-nav">
                                 <div class="cart-icon icon">

@@ -38,7 +38,7 @@ urlpatterns = [
     path('wishlist', homeViews.wishlist, name='wishlist'),
 
     # shop
-    path('account', shopViews.account, name='account'),
+
     path('check-out', shopViews.checkOut, name='checkOut'),
     path('full-width-shop', shopViews.fullWidthShop, name='fullWidthShop'),
     path('grouped-products', shopViews.groupedProducts, name='groupedProducts'),
@@ -50,6 +50,8 @@ urlpatterns = [
 
     # cart
     path('cart/', include('cart.urls')),
+    # users
+    path('users/', include('users.urls')),
 ]
 
 if settings.DEBUG:

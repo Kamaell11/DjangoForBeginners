@@ -153,16 +153,7 @@ def featured_shoes(request):
     }
     return render(request, 'home/featured_product.html', context)
 
-def account(request):     
-      data = {
-       'title':'Account',
-       'subTitle':'Shop',
-       'subTitle2':'Account',
-       'css':'<link rel="stylesheet" type="text/css" href="/static/css/variables/variable6.css"/>',
-       'footer':'true',
-       'script':'<script src="/static/js/vendors/zoom.js"></script>',
-      }
-      return render(request, "shop/account.html", data)
+
 
 def cart(request):     
       data = {

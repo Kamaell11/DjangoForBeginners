@@ -11,7 +11,7 @@ export $(shell sed 's/=.*//' .env)
 
 # Variables for Django project
 PROJECT_NAME = $(DJANGO_PROJECT_NAME)
-APP_NAME = $(DJANGO_APP_NAME)
+DJANGO_APP_NAME = $(filter-out $@,$(MAKECMDGOALS))
 
 # Install dependencies
 install:
@@ -31,7 +31,7 @@ migrate:
 	$(PYTHON) $(PROJECT_NAME)/manage.py migrate
 
 # Making new Django app
-startapp:
+app:
 	@echo "Making new Django app..."
 	$(PYTHON) $(PROJECT_NAME)/manage.py startapp $(DJANGO_APP_NAME)
 
