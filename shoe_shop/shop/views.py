@@ -22,7 +22,6 @@ def home(request):
         if cart:
             cart_item_count = CartItem.objects.filter(cart=cart).count()
     else:
-        # Jeśli użytkownik nie jest zalogowany, możemy użyć sesji (jeśli wcześniej zapisano liczbę przedmiotów)
         cart_item_count = request.session.get('cart_item_count', 0)
 
 
@@ -36,6 +35,41 @@ def home(request):
         'cart_item_count': cart_item_count, 
     })
 
+def shop(request):
+    shoes = Shoe.objects.all()
+
+    # Obsługa sortowania
+    sort_by = request.GET.get("sort_by", "")
+    if sort_by == "price_asc":
+        shoes = shoes.order_by("price")
+    elif sort_by == "price_desc":
+        shoes = shoes.order_by("-price")
+    elif sort_by == "latest":
+        shoes = shoes.order_by("-created_at")
+
+    # Paginacja
+    paginator = Paginator(shoes, 12)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    categories = Category.objects.annotate(product_count=Count("shoe"))
+
+    cart_item_count = 0
+    if request.user.is_authenticated:
+        cart = Cart.objects.filter(user=request.user).first()
+        if cart:
+            cart_item_count = CartItem.objects.filter(cart=cart).count()
+    else:
+        cart_item_count = request.session.get("cart_item_count", 0)
+
+    return render(request, "shop/shop.html", {
+        "shoes": page_obj,
+        "categories": categories,
+        "title": "Shop",
+        "footer": True,
+        "paginator": paginator,
+        "cart_item_count": cart_item_count,
+    })
 
 def category_detail(request, category_id):
     category = get_object_or_404(Category, id=category_id)
@@ -75,7 +109,6 @@ def category_detail(request, category_id):
         if cart:
             cart_item_count = CartItem.objects.filter(cart=cart).count()
     else:
-        # Jeśli użytkownik nie jest zalogowany, możemy użyć sesji (jeśli wcześniej zapisano liczbę przedmiotów)
         cart_item_count = request.session.get('cart_item_count', 0)
     return render(
         request,
@@ -99,7 +132,6 @@ def product_details(request, shoe_id):
         if cart:
             cart_item_count = CartItem.objects.filter(cart=cart).count()
     else:
-        # Jeśli użytkownik nie jest zalogowany, możemy użyć sesji (jeśli wcześniej zapisano liczbę przedmiotów)
         cart_item_count = request.session.get('cart_item_count', 0)
     return render(request, 'shop/productDetails.html', {
         'shoe': shoe,
@@ -186,17 +218,7 @@ def productDetails(request):
       return render(request, "shop/productDetails.html", data)
 
 
-def shop(request):     
-      data = {
-       'title':'Shop',
-       'subTitle':'Shop',
-       'subTitle2':'Shop',
-       'css':'<link rel="stylesheet" type="text/css" href="/static/css/variables/variable6.css"/>',
-       'css2':'<link rel="stylesheet" type="text/css" href="/static/css/jquery.nstSlider.min.css"/>',
-       'footer':'true',
-       'script':'<script src="/static/js/vendors/zoom.js"></script>  <script src="/static/js/vendors/jquery.nstSlider.min.js"></script>',
-      }
-      return render(request, "shop/shop.html", data)
+
 
 def sidebarLeft(request):     
       data = {
