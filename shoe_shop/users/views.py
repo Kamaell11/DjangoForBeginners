@@ -8,6 +8,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from cart.models import Cart, CartItem
 
+
 def register_view(request):
     categories = Category.objects.all()
     cart_item_count = 0  # Możesz dodać logikę liczenia elementów w koszyku
@@ -118,3 +119,21 @@ def account_view(request):
         'cart_item_count': cart_item_count,
     }
     return render(request, "users/account.html", data)
+
+
+
+@login_required
+def edit_address(request):
+    if request.method == "POST":
+        billing_address = request.POST.get("billing_address", "").strip()
+        shipping_address = request.POST.get("shipping_address", "").strip()
+
+        if billing_address and shipping_address:
+            request.session["billing_address"] = billing_address
+            request.session["shipping_address"] = shipping_address
+            messages.success(request, "Address updated successfully!")
+            return redirect("account")
+        else:
+            messages.error(request, "Both fields are required.")
+
+    return render(request, "users/edit_address.html")

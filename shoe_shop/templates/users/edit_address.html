@@ -1,0 +1,39 @@
+{% extends '../layout/layout.html' %}
+
+{% block script %}
+    <script src="/static/js/vendors/zoom.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="edit-address-area d-flex align-items-center justify-content-center" style="min-height: 80vh;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-8">
+                <div class="edit-address-form">
+                    <div class="section-title text-center">
+                        <h2>Edit Address</h2>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <form method="POST" action="{% url 'edit_address' %}">
+                                {% csrf_token %}
+                                <div class="form">
+                                    <label for="billing_address">Billing Address:</label>
+                                    <input type="text" name="billing_address" class="form-control" id="billing_address" value="{{ user.profile.billing_address|default:'' }}" required>
+                                </div>
+                                <div class="form">
+                                    <label for="shipping_address">Shipping Address:</label>
+                                    <input type="text" name="shipping_address" class="form-control" id="shipping_address" value="{{ user.profile.shipping_address|default:'' }}" required>
+                                </div>
+                                <div class="form text-center">
+                                    <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
