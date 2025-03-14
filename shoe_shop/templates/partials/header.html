@@ -111,17 +111,27 @@
                         </div>
                         <div class="auth-buttons">
                             {% if user.is_authenticated %}
-                                <!-- Jeśli użytkownik jest zalogowany -->
-                                <a href="{% url 'account' %}" class="btn btn-account">Moje konto</a>
-                                <form action="{% url 'logout' %}" method="post" class="logout-form">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-logout">Wyloguj</button>
-                                </form>
+                            
+                                <div class="header-action-items">
+                                    <a href="{% url 'account' %}" class="action-item icon" title="Moje konto">
+                                        <i class="fas fa-user"></i>
+                                    </a>
+                                    <form action="{% url 'logout' %}" method="post" class="logout-form">
+                                        {% csrf_token %}
+                                        <button type="submit" class="action-item icon" title="Wyloguj">
+                                            <i class="fas fa-sign-out-alt"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             {% else %}
-                                <!-- Jeśli użytkownik nie jest zalogowany -->
-                                <a href="{% url 'login' %}" class="btn btn-login">Zaloguj się</a>
+                               
+                                <a href="{% url 'login' %}" class="action-item icon" title="Zaloguj się">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                </a>
                             {% endif %}
                         </div>
+                        
+                        
                         <div class="cart action-item">
                             <div class="cart-nav">
                                 <div class="cart-icon icon">
