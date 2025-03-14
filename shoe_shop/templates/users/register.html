@@ -15,32 +15,64 @@
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <form method="POST" action="{% url 'register' %}">  <!-- Dodaj action i method -->
-                                {% csrf_token %}  <!-- Dodaj csrf_token -->
-                                <div class="form">
-                                    <input type="text" name="username" class="form-control" id="username" placeholder="Username*" required>
+                            <!-- Wyświetlanie błędów formularza -->
+                            {% if form.errors %}
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        {% for field in form %}
+                                            {% for error in field.errors %}
+                                                <li>{{ error }}</li>
+                                            {% endfor %}
+                                        {% endfor %}
+                                        {% for error in form.non_field_errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
                                 </div>
+                            {% endif %}
+
+                            <form method="POST" action="{% url 'register' %}">
+                                {% csrf_token %}
+                                
                                 <div class="form">
-                                    <input type="email" name="email" class="form-control" id="email" placeholder="Email address*" required>
+                                    <input type="text" name="username" class="form-control" id="username" placeholder="Username*" required value="{{ form.username.value|default_if_none:'' }}">
                                 </div>
+                                
+                                <div class="form">
+                                    <input type="email" name="email" class="form-control" id="email" placeholder="Email address*" required value="{{ form.email.value|default_if_none:'' }}">
+                                </div>
+
                                 <div class="form">
                                     <div class="password-input">
                                         <input type="password" name="password1" class="form-control" id="password1" placeholder="Password*" required>
-                                        <span class="show-password-input">👁️</span>  <!-- Ikona pokazywania hasła -->
+                                        <span class="show-password-input">👁️</span>
                                     </div>
                                 </div>
+
                                 <div class="form">
                                     <div class="password-input">
                                         <input type="password" name="password2" class="form-control" id="password2" placeholder="Confirm Password*" required>
-                                        <span class="show-password-input">👁️</span>  <!-- Ikona pokazywania hasła -->
+                                        <span class="show-password-input">👁️</span>
                                     </div>
                                 </div>
+
+                                <!-- Pole adresowe -->
+                                <div class="form">
+                                    <textarea name="address" class="form-control" id="address" placeholder="Address">{{ form.address.value|default_if_none:'' }}</textarea>
+                                </div>
+
+                                <!-- Pole adresu rozliczeniowego -->
+                                <div class="form">
+                                    <textarea name="billing_address" class="form-control" id="billing_address" placeholder="Billing Address">{{ form.billing_address.value|default_if_none:'' }}</textarea>
+                                </div>
+
                                 <div class="form text-center">
                                     <button type="submit" class="btn btn-success w-100">Register</button>
                                 </div>
                             </form>
                         </div>
                     </div>
+
                     <div class="text-center mt-4">
                         <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
                     </div>

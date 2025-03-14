@@ -5,6 +5,11 @@ from django.contrib.auth.forms import AuthenticationForm
 from .models import CustomUser
 
 
+from django import forms
+from django.contrib.auth.hashers import make_password
+from django.core.exceptions import ValidationError
+from .models import CustomUser  
+
 class RegisterForm(forms.ModelForm):
     password1 = forms.CharField(
         widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}), 
@@ -14,10 +19,20 @@ class RegisterForm(forms.ModelForm):
         widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}), 
         label="Potwierdź hasło"
     )
+    address = forms.CharField(
+        widget=forms.Textarea(attrs={"rows": 2}),
+        required=False,
+        label="Adres"
+    )
+    billing_address = forms.CharField(
+        widget=forms.Textarea(attrs={"rows": 2}),
+        required=False,
+        label="Adres rozliczeniowy"
+    )
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'email']
+        fields = ['username', 'email', 'address', 'billing_address']
 
     def clean(self):
         cleaned_data = super().clean()
@@ -48,6 +63,7 @@ class RegisterForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(
