@@ -1,0 +1,11 @@
+{% extends 'layout/layout.html' %}
+{% block content %}
+<h2>My Wishlist</h2>
+<ul>
+    {% for shoe in wishlist.shoes.all %}
+        <li>{{ shoe.name }} - ${{ shoe.price }}</li>
+    {% empty %}
+        <li>Your wishlist is empty.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

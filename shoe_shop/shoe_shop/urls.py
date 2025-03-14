@@ -52,6 +52,11 @@ urlpatterns = [
     path('cart/', include('cart.urls')),
     # users
     path('users/', include('users.urls')),
+    # orders
+    path('orders/', include('orders.urls')),
+    # wishlist
+    path('wishlist/', include('wishlist.urls')),
+
 ]
 
 if settings.DEBUG:
