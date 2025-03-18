@@ -108,10 +108,18 @@ def account_view(request):
         cart = Cart.objects.filter(user=request.user).first()
         if cart:
             cart_item_count = CartItem.objects.filter(cart=cart).count()
-
+    orders = request.user.orders.all()  
+    active_orders_count = orders.exclude(status="completed").count() if orders.exists() else 0  
+    wishlist = request.user.wishlist 
+    active_wishlist_count = wishlist.shoes.count() if wishlist else 0
+    
     data = {
         'title': 'Account',
         'subTitle': 'Shop',
+        'orders': orders,
+        'active_orders_count': active_orders_count,
+        'wishlist': wishlist,
+        'active_wishlist_count': active_wishlist_count,
         'subTitle2': 'Account',
         'css': '<link rel="stylesheet" type="text/css" href="/static/css/variables/variable6.css"/>',
         'footer': 'true',

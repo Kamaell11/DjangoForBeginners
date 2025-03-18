@@ -9,7 +9,8 @@
                 <button class="filter-btn active" data-show=".dashboard"><i class="fal fa-chart-bar"></i> Dashboard</button>
                 <button class="filter-btn" data-show=".orders"><i class="fal fa-shopping-cart"></i> Orders</button>
                 <button class="filter-btn" data-show=".address"><i class="fal fa-map-marker-alt"></i> Address</button>
-                <a href="{% url 'wishlist' %}" class="filter-btn" data-show=".dashboard"><i class="fal fa-shopping-basket"></i> Wishlist</a>
+                <button class="filter-btn" data-show=".wishlist"><i class="fal fa-shopping-basket"></i> Wishlist</button>
+
                 <form action="{% url 'logout' %}" method="post" class="logout-form">
                     {% csrf_token %}
                     <button type="submit" class="filter-btn"><i class="fal fa-long-arrow-left"></i> Logout</button>
@@ -29,12 +30,7 @@
                         <div class="activity-item">
                             <div class="icon"><i class="fas fa-box-check"></i></div>
                             <span class="title">Active Orders</span>
-                            <span class="value">33</span>
-                        </div>
-                        <div class="activity-item">
-                            <div class="icon"><i class="fas fa-download"></i></div>
-                            <span class="title">Downloads</span>
-                            <span class="value">10</span>
+                            <span class="value">{{ active_orders_count }}</span>
                         </div>
                         <div class="activity-item">
                             <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
@@ -46,7 +42,9 @@
                         <div class="activity-item">
                             <div class="icon"><i class="fas fa-heart"></i></div>
                             <span class="title">Wishlist</span>
-                            <span class="value">33</span>
+                            <span class="value">
+                                {{ active_wishlist_count }}
+                            </span>
                         </div>
                         <form action="{% url 'logout' %}" method="post" class="logout-form">
                             {% csrf_token %}
@@ -71,27 +69,19 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% for order in orders %}
                             <tr>
-                                <td>#1357</td>
-                                <td>March 45, 2020</td>
-                                <td>Processing</td>
-                                <td>$125.00 for 2 item</td>
-                                <td><a href="#" class="btn-small d-block">View</a></td>
+                                <td>#{{ order.id }}</td>
+                                <td>{{ order.created_at|date:"F j, Y" }}</td>
+                                <td>{{ order.get_status_display }}</td>
+                                <td>${{ order.total_price }} for {{ order.items.count }} item{{ order.items.count|pluralize }}</td>
+                                <td><a href="{% url 'order_detail' order.id %}" class="btn-small d-block">View</a></td>
                             </tr>
+                            {% empty %}
                             <tr>
-                                <td>#2468</td>
-                                <td>June 29, 2020</td>
-                                <td>Completed</td>
-                                <td>$364.00 for 5 item</td>
-                                <td><a href="#" class="btn-small d-block">View</a></td>
+                                <td colspan="5">No orders found.</td>
                             </tr>
-                            <tr>
-                                <td>#2366</td>
-                                <td>August 02, 2020</td>
-                                <td>Completed</td>
-                                <td>$280.00 for 3 item</td>
-                                <td><a href="#" class="btn-small d-block">View</a></td>
-                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -118,7 +108,33 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="account-main wishlist filterd-items hide">
+                    <h2 class="mb--30">My Wishlist</h2>
+                    <table class="table">
+                        <thead>
+                            <tr class="top-tr">
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in wishlist_items %}
+                            <tr>
+                                <td>{{ item.name }}</td>
+                                <td>${{ item.price }}</td>
+                                <td>
+                                    <a href="{% url 'remove_from_wishlist' item.id %}" class="btn-small">Remove</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3">Your wishlist is empty.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
                 <div class="account-main accountdtls filterd-items hide">
                     <div class="login-form">
                         <div class="section-title">
