@@ -38,7 +38,22 @@
     <!-- Dodatkowe skrypty specyficzne dla strony -->
     {% block script %}
     {% endblock %}
-
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".show-password-input").forEach(function (eyeIcon) {
+            eyeIcon.addEventListener("click", function () {
+                let passwordInput = this.previousElementSibling;
+                if (passwordInput.type === "password") {
+                    passwordInput.type = "text";
+                    this.textContent = "🙈"; 
+                } else {
+                    passwordInput.type = "password";
+                    this.textContent = "👁️"; 
+                }
+            });
+        });
+    });
+</script>
 </body>
 
 </html>

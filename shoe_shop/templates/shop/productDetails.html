@@ -39,7 +39,10 @@
                     <a href="#" class="addto-cart-btn action-item">
                         <i class="rt-basket-shopping"></i> Add To Cart
                     </a>
-                    <a href="{% url 'wishlist' %}" class="wishlist-btn action-item"><i class="rt-heart"></i></a>
+                    <a href="#" class="wishlist-btn action-item" data-shoe-id="{{ shoe.id }}">
+                        <i class="rt-heart"></i>
+                    </a>
+                    <span id="wishlist-message" style="margin-left: 10px; color: green;"></span>
                 </div>
                 <div class="product-uniques">
                     <span class="sku product-unipue"><span>SKU: </span> {{ shoe.id }}</span>
@@ -51,5 +54,34 @@
     </div>
 </div>
 <!-- ..::Product-details Section End Here::.. -->
-
+<!-- Script for adding product to wishlist -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelector(".wishlist-btn").addEventListener("click", function (e) {
+            e.preventDefault();  
+    
+            let shoeId = this.getAttribute("data-shoe-id");
+            let messageBox = document.getElementById("wishlist-message");
+    
+            fetch("{% url 'add_to_wishlist' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: "shoe_id=" + shoeId
+            })
+            .then(response => response.json())
+            .then(data => {
+                messageBox.innerText = data.message;
+                if (data.added) {
+                    this.classList.add("active");  
+                } else {
+                    this.classList.remove("active");
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    });
+    </script>
 {% endblock content %}

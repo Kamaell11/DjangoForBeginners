@@ -32,10 +32,9 @@
                     <nav class="nav navbar">
                         <div class="navbar-menu">
                             <ul>
-                                <li><a href="#">About Us</a></li>
-                                <li><a href="#">My Account</a></li>
-                                <li><a href="#">Whishlist</a></li>
-                                <li><a href="#">Order Tracking</a></li>
+                                <li><a href="{% url 'account' %}?section=dashboard">My Account</a></li>
+                                <li><a href="{% url 'account' %}?section=wishlist">Wishlist</a></li>
+                                <li><a href="{% url 'account' %}?section=orders">Order Tracking</a></li>
                             </ul>
                         </div>
                     </nav>
@@ -67,7 +66,7 @@
                     <!-- Left side: Logo i hamburger -->
                     <div class="left-side">
                         <div class="hamburger-1">
-                            <a href="#" class="nav-menu-link">
+                            <a href="{% url 'home' %}" class="nav-menu-link">
                                 <span class="dot1"></span>
                                 <span class="dot2"></span>
                                 <span class="dot3"></span>
@@ -136,7 +135,7 @@
                             <div class="cart-nav">
                                 <div class="cart-icon icon">
                                     <a href="{% url 'cart:cart' %}"><i aria-hidden="true" class="fas fa-shopping-basket"></i></a>
-                                    <span class="wishlist-dot icon-dot">{{ cart_item_count }}</span>  <!-- Liczba przedmiotów w koszyku -->
+                                    <span class="wishlist-dot icon-dot">{{ cart_item_count }}</span>  
                                 </div>
                             </div>
                         </div>

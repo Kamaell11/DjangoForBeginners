@@ -110,31 +110,37 @@
                 </div>
                 <div class="account-main wishlist filterd-items hide">
                     <h2 class="mb--30">My Wishlist</h2>
-                    <table class="table">
-                        <thead>
-                            <tr class="top-tr">
-                                <th>Product</th>
-                                <th>Price</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for item in wishlist_items %}
-                            <tr>
-                                <td>{{ item.name }}</td>
-                                <td>${{ item.price }}</td>
-                                <td>
-                                    <a href="{% url 'remove_from_wishlist' item.id %}" class="btn-small">Remove</a>
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="3">Your wishlist is empty.</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                    
+                    <div class="row">
+                        {% for shoe in wishlist_items %}
+                        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-4">
+                            <div class="card h-100">
+                                <img src="{{ shoe.image.url }}" class="card-img-top" alt="{{ shoe.name }}" style="height: 200px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ shoe.name }}</h5>
+                                    <p class="card-text">${{ shoe.price }}</p>
+                                </div>
+                                <div class="card-footer bg-white">
+                                    <form method="post" action="{% url 'remove_from_wishlist' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="shoe_id" value="{{ shoe.id }}">
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash-alt"></i> Remove
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="col-12">
+                            <div class="alert alert-info">
+                                Your wishlist is currently empty.
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
+                
                 <div class="account-main accountdtls filterd-items hide">
                     <div class="login-form">
                         <div class="section-title">
@@ -173,5 +179,74 @@
         </div>
     </div>
 </div>
-
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // 1. Obsługa przełączania sekcji konta
+        const params = new URLSearchParams(window.location.search);
+        const section = params.get("section");
+        const sections = document.querySelectorAll(".account-main");
+    
+        sections.forEach(sec => sec.classList.add("hide"));
+    
+        if (section) {
+            const target = document.querySelector("." + section);
+            if (target) {
+                target.classList.remove("hide");
+            }
+        } else {
+            document.querySelector(".dashboard").classList.remove("hide");
+        }
+    
+        // 2. Obsługa usuwania z wishlisty
+        document.querySelectorAll('.remove-wishlist-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const form = this;
+                const productCard = form.closest('.col-xl-3, .col-lg-4, .col-md-6, .col-sm-6, .col-12');
+                
+                fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form),
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value
+                    },
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Animacja znikania
+                        productCard.style.transition = 'opacity 0.3s';
+                        productCard.style.opacity = '0';
+                        
+                        // Usunięcie elementu po animacji
+                        setTimeout(() => {
+                            productCard.remove();
+                            
+                            // Aktualizacja licznika
+                            const wishlistCount = document.querySelector('.wishlist-count');
+                            if (wishlistCount) {
+                                const currentCount = parseInt(wishlistCount.textContent);
+                                wishlistCount.textContent = currentCount - 1;
+                            }
+                            
+                            // Jeśli lista jest pusta, pokaż komunikat
+                            const wishlistContainer = document.querySelector('.account-main.wishlist .row');
+                            if (wishlistContainer && wishlistContainer.children.length === 0) {
+                                wishlistContainer.innerHTML = `
+                                    <div class="col-12">
+                                        <div class="alert alert-info">
+                                            Your wishlist is currently empty.
+                                        </div>
+                                    </div>
+                                `;
+                            }
+                        }, 300);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    });
+    </script>
 {% endblock content %}

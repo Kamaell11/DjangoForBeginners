@@ -7,21 +7,22 @@ from .forms import SimplePasswordResetForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from cart.models import Cart, CartItem
+from wishlist.models import Wishlist
 
 
 def register_view(request):
     categories = Category.objects.all()
-    cart_item_count = 0  # Możesz dodać logikę liczenia elementów w koszyku
+    cart_item_count = 0 
 
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.success(request, 'Registration successful! You are now logged in.')  # Dodaj komunikat
+            messages.success(request, 'Registration successful! You are now logged in.')  
             return redirect('home')
         else:
-            messages.error(request, 'Registration failed. Please correct the errors.')  # Dodaj komunikat o błędach
+            messages.error(request, 'Registration failed. Please correct the errors.') 
     else:
         form = RegisterForm()
 
@@ -102,32 +103,30 @@ def simple_password_reset_view(request):
 
 
 @login_required
-def account_view(request):     
+def account_view(request):
     cart_item_count = 0
+
     if request.user.is_authenticated:
         cart = Cart.objects.filter(user=request.user).first()
         if cart:
             cart_item_count = CartItem.objects.filter(cart=cart).count()
+
+    # Pobierz wishlistę i produkty
+    wishlist, created = Wishlist.objects.get_or_create(user=request.user)
+    wishlist_items = wishlist.shoes.all()
+
     orders = request.user.orders.all()  
     active_orders_count = orders.exclude(status="completed").count() if orders.exists() else 0  
-    wishlist = request.user.wishlist 
-    active_wishlist_count = wishlist.shoes.count() if wishlist else 0
-    
+
     data = {
         'title': 'Account',
-        'subTitle': 'Shop',
         'orders': orders,
         'active_orders_count': active_orders_count,
-        'wishlist': wishlist,
-        'active_wishlist_count': active_wishlist_count,
-        'subTitle2': 'Account',
-        'css': '<link rel="stylesheet" type="text/css" href="/static/css/variables/variable6.css"/>',
-        'footer': 'true',
-        'script': '<script src="/static/js/vendors/zoom.js"></script>',
+        'wishlist_items': wishlist_items,  # Teraz przekazujemy listę produktów
+        'active_wishlist_count': wishlist_items.count(),
         'cart_item_count': cart_item_count,
     }
     return render(request, "users/account.html", data)
-
 
 
 @login_required
