@@ -25,29 +25,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('shop.urls')),
     path('', homeViews.index, name ='index'),
-    path('all-category', homeViews.allCategory, name='allCategory'),
-    path('category', homeViews.category, name='category'),
-    path('external-products', homeViews.externalProducts, name='externalProducts'),
-    path('index', homeViews.index, name='index'),
-    path('index-two', homeViews.indexTwo, name='indexTwo'),
-    path('login', homeViews.login, name='login'),
-    path('out-of-stock-products', homeViews.outOfStockProducts, name='outOfStockProducts'),
-    path('shop-five-column', homeViews.shopFiveColumn, name='shopFiveColumn'),
-    path('simple-products', homeViews.simpleProducts, name='simpleProducts'),
-    path('thankYou', homeViews.thankYou, name='thankYou'),
-    path('wishlist', homeViews.wishlist, name='wishlist'),
-
+    
     # shop
-
-    path('check-out', shopViews.checkOut, name='checkOut'),
-    path('full-width-shop', shopViews.fullWidthShop, name='fullWidthShop'),
-    path('grouped-products', shopViews.groupedProducts, name='groupedProducts'),
-    path('product-details', shopViews.productDetails, name='productDetails'),
     path('shop', shopViews.shop, name='shop'),
-    path('sidebar-left', shopViews.sidebarLeft, name='sidebarLeft'),
-    path('sidebar-right', shopViews.sidebarRight, name='sidebarRight'),
-    path('variable-products', shopViews.variableProducts, name='variableProducts'),
-
     # cart
     path('cart/', include('cart.urls')),
     # users
