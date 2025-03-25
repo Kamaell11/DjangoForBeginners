@@ -1,8 +1,17 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Category, Shoe
+from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.db.models import Count
+from django.db.models import Avg
+
+import random
+
+from .models import Category, Shoe
 from cart.models import Cart, CartItem
+
+from reviews.forms import ReviewForm
+from reviews.models import Review 
+
+
 
 def home(request):
     categories = Category.objects.all()
@@ -38,7 +47,6 @@ def home(request):
 def shop(request):
     shoes = Shoe.objects.all()
 
-    # Obsługa sortowania
     sort_by = request.GET.get("sort_by", "")
     if sort_by == "price_asc":
         shoes = shoes.order_by("price")
@@ -47,7 +55,6 @@ def shop(request):
     elif sort_by == "latest":
         shoes = shoes.order_by("-created_at")
 
-    # Paginacja
     paginator = Paginator(shoes, 12)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
@@ -123,10 +130,9 @@ def category_detail(request, category_id):
         },
     )
 
-from django.db.models import Avg
-from django.shortcuts import render, get_object_or_404, redirect
-from reviews.forms import ReviewForm
-from reviews.models import Review 
+
+
+
 def product_details(request, shoe_id):
     shoe = get_object_or_404(Shoe, id=shoe_id)
     avg_rating = Review.objects.filter(shoe=shoe).aggregate(avg=Avg("rating"))["avg"]
@@ -149,6 +155,7 @@ def product_details(request, shoe_id):
         else:
             form = ReviewForm()
         cart_item_count = request.session.get('cart_item_count', 0)
+
     return render(request, 'shop/productDetails.html', {
         'shoe': shoe,
         "avg_rating": avg_rating,
@@ -162,7 +169,7 @@ def product_details(request, shoe_id):
     })
 
 
-import random
+
 
 def featured_shoes(request):
     featured_products = Shoe.objects.filter(is_featured=True)

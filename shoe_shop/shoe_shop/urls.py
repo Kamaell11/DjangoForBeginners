@@ -18,15 +18,14 @@ from django.contrib import admin
 from django.urls import path, include 
 from django.conf import settings
 from django.conf.urls.static import static
-from shoe_shop import homeViews
+
 from shop import views as shopViews
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('shop.urls')),
-    path('', homeViews.index, name ='index'),
-    
+
     # shop
     path('shop', shopViews.shop, name='shop'),
     # cart

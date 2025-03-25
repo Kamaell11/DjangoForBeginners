@@ -31,11 +31,9 @@ def remove_from_wishlist(request):
     if request.method == "POST":
         shoe_id = request.POST.get("shoe_id")
         shoe = get_object_or_404(Shoe, id=shoe_id)
-        
-        # Pobierz listę życzeń użytkownika
+     
         wishlist = Wishlist.objects.get(user=request.user)
         
-        # Usuń but z listy życzeń
         wishlist.shoes.remove(shoe)
         
         return JsonResponse({"message": "Removed from wishlist", "removed": True})

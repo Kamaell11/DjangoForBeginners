@@ -82,7 +82,6 @@ def create_order(request):
             data = json.loads(request.body)
             shipping_method = data.get('shipping_method', 'flat_rate')
             
-            # Convert shipping cost to Decimal
             shipping_cost = Decimal('10.00') if shipping_method == 'flat_rate' else Decimal('0.00')
             total_price = cart.get_total_price() + shipping_cost
             

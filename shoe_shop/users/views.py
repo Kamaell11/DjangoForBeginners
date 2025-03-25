@@ -49,11 +49,11 @@ def login_view(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                messages.success(request, 'You have been logged in successfully.')  # Dodaj komunikat
+                messages.success(request, 'You have been logged in successfully.')  
                 next_url = request.GET.get('next', 'shop')
                 return redirect(next_url)
         else:
-            messages.error(request, 'Invalid username or password.')  # Dodaj komunikat o błędzie
+            messages.error(request, 'Invalid username or password.')  
     else:
         form = LoginForm()
 
@@ -68,7 +68,7 @@ def login_view(request):
 @login_required
 def logout_view(request):
     logout(request)
-    messages.success(request, 'You have been logged out successfully.')  # Dodaj komunikat
+    messages.success(request, 'You have been logged out successfully.')  
     return redirect("home")
 
 def simple_password_reset_view(request):
@@ -83,13 +83,12 @@ def simple_password_reset_view(request):
             user.set_password(new_password)
             user.save()
 
-            # Aktualizacja sesji, żeby użytkownik nie został wylogowany
             update_session_auth_hash(request, user)
             
-            messages.success(request, "Your password has been reset successfully.")  # Dodaj komunikat
+            messages.success(request, "Your password has been reset successfully.")  
             return redirect("login")
         else:
-            messages.error(request, "Password reset failed. Please correct the errors.")  # Dodaj komunikat o błędach
+            messages.error(request, "Password reset failed. Please correct the errors.")  
     else:
         form = SimplePasswordResetForm()
 
@@ -122,7 +121,7 @@ def account_view(request):
         'title': 'Account',
         'orders': orders,
         'active_orders_count': active_orders_count,
-        'wishlist_items': wishlist_items,  # Teraz przekazujemy listę produktów
+        'wishlist_items': wishlist_items, 
         'active_wishlist_count': wishlist_items.count(),
         'cart_item_count': cart_item_count,
     }
