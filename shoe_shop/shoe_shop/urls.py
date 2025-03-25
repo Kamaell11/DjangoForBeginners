@@ -39,6 +39,8 @@ urlpatterns = [
     path('wishlist/', include('wishlist.urls')),
     # newsletter
     path("newsletter/", include("newsletter.urls")),
+    # reviews
+    path("reviews/", include("reviews.urls")),
 
 ]
 

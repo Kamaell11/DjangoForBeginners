@@ -19,10 +19,13 @@
                 <div class="product-status">
                     <span class="product-category">{{ shoe.category.name }}</span>
                     <div class="rating-stars-group">
-                        <div class="rating-star"><i class="fas fa-star"></i></div>
-                        <div class="rating-star"><i class="fas fa-star"></i></div>
-                        <div class="rating-star"><i class="fas fa-star-half-alt"></i></div>
-                        <span>10 Reviews</span>
+                        {% for _ in ''|rjust:full_stars %}
+                            <i class="fas fa-star"></i>
+                        {% endfor %}
+                        {% for _ in ''|rjust:empty_stars %}
+                            <i class="far fa-star"></i>
+                        {% endfor %}
+                        <span>{{ reviews.count }} Reviews</span>
                     </div>
                 </div>
                 <h2 class="product-title">{{ shoe.name }} <span class="stock">In Stock</span></h2>
@@ -55,15 +58,13 @@
     </div>
 </div>
 <!-- ..::Product-details Section End Here::.. -->
-<!-- Script for adding product to wishlist -->
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         document.querySelector(".wishlist-btn").addEventListener("click", function (e) {
             e.preventDefault();  
-    
             let shoeId = this.getAttribute("data-shoe-id");
             let messageBox = document.getElementById("wishlist-message");
-    
             fetch("{% url 'add_to_wishlist' %}", {
                 method: "POST",
                 headers: {
@@ -84,48 +85,41 @@
             .catch(error => console.error("Error:", error));
         });
     });
-    </script>
-    <!-- Script for adding product to cart -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
 
-            document.querySelector(".addto-cart-btn").addEventListener("click", function (e) {
-                e.preventDefault();
-                
-                let shoeId = this.getAttribute("data-shoe-id");
-                let messageBox = document.getElementById("cart-message");
-                
-
-                fetch("{% url 'cart:add_to_cart' shoe.id %}", {
-
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded",
-                        "X-CSRFToken": "{{ csrf_token }}"
-                    },
-                    body: "shoe_id=" + shoeId
-                })
-                .then(response => {
-                    if (response.redirected) {
-                        window.location.href = response.url;
-                    } else {
-                        return response.json();
-                    }
-                })
-                .then(data => {
-                    if (data) {
-                        messageBox.innerText = data.message || "Product added to cart!";
-                
-                        if (data.cart_item_count !== undefined) {
-                            const cartCountElement = document.querySelector('.cart-count');
-                            if (cartCountElement) {
-                                cartCountElement.textContent = data.cart_item_count;
-                            }
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelector(".addto-cart-btn").addEventListener("click", function (e) {
+            e.preventDefault();
+            let shoeId = this.getAttribute("data-shoe-id");
+            let messageBox = document.getElementById("cart-message");
+            fetch("{% url 'cart:add_to_cart' shoe.id %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: "shoe_id=" + shoeId
+            })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                } else {
+                    return response.json();
+                }
+            })
+            .then(data => {
+                if (data) {
+                    messageBox.innerText = data.message || "Product added to cart!";
+                    if (data.cart_item_count !== undefined) {
+                        const cartCountElement = document.querySelector('.cart-count');
+                        if (cartCountElement) {
+                            cartCountElement.textContent = data.cart_item_count;
                         }
                     }
-                })
-                .catch(error => console.error("Error:", error));
-            });
+                }
+            })
+            .catch(error => console.error("Error:", error));
         });
-    </script>
+    });
+</script>
+
 {% endblock content %}

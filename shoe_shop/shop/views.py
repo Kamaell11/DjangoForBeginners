@@ -123,21 +123,41 @@ def category_detail(request, category_id):
         },
     )
 
-
+from django.db.models import Avg
+from django.shortcuts import render, get_object_or_404, redirect
+from reviews.forms import ReviewForm
+from reviews.models import Review 
 def product_details(request, shoe_id):
     shoe = get_object_or_404(Shoe, id=shoe_id)
+    avg_rating = Review.objects.filter(shoe=shoe).aggregate(avg=Avg("rating"))["avg"]
+    full_stars = int(avg_rating) if avg_rating else 0
+    empty_stars = 5 - full_stars
     cart_item_count = 0
+    reviews = Review.objects.filter(shoe=shoe)
     if request.user.is_authenticated:
         cart = Cart.objects.filter(user=request.user).first()
         if cart:
             cart_item_count = CartItem.objects.filter(cart=cart).count()
-    else:
+            form = ReviewForm(request.POST)
+            if form.is_valid():
+                review = form.save(commit=False)
+                review.user = request.user
+                review.shoe = shoe
+                review.save()
+                return redirect("product_details", product_id=shoe.id)
+        else:
+            form = ReviewForm()
         cart_item_count = request.session.get('cart_item_count', 0)
     return render(request, 'shop/productDetails.html', {
         'shoe': shoe,
+        "avg_rating": avg_rating,
+        "full_stars": full_stars,
+        "empty_stars": empty_stars,
         'title': True,
         'footer': True,
         'cart_item_count': cart_item_count, 
+        "form": form,
+        "reviews": reviews,
     })
 
 

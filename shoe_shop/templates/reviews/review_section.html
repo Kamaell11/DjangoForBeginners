@@ -1,0 +1,10 @@
+{% for review in reviews %}
+    <div class="review">
+        <p><strong>{{ review.user.username }}</strong></p>
+        <p>Rating: {{ review.rating }}/5</p>
+        <p>{{ review.comment }}</p>
+        <hr>
+    </div>
+{% empty %}
+    <p>No reviews yet.</p>
+{% endfor %}
