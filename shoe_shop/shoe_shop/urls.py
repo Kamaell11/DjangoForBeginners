@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 from shoe_shop import homeViews
 from shop import views as shopViews
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('shop.urls')),
@@ -36,6 +37,8 @@ urlpatterns = [
     path('orders/', include('orders.urls')),
     # wishlist
     path('wishlist/', include('wishlist.urls')),
+    # newsletter
+    path("newsletter/", include("newsletter.urls")),
 
 ]
 
