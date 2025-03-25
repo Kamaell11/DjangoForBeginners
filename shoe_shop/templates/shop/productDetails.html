@@ -36,9 +36,10 @@
                             <button class="button plus">+<i class="fal fa-plus plus"></i></button>
                         </div>
                     </div>
-                    <a href="#" class="addto-cart-btn action-item">
+                    <a href="#" class="addto-cart-btn action-item" data-shoe-id="{{ shoe.id }}">
                         <i class="rt-basket-shopping"></i> Add To Cart
                     </a>
+                    <span id="cart-message" style="margin-left: 10px; color: green;"></span>
                     <a href="#" class="wishlist-btn action-item" data-shoe-id="{{ shoe.id }}">
                         <i class="rt-heart"></i>
                     </a>
@@ -83,5 +84,48 @@
             .catch(error => console.error("Error:", error));
         });
     });
+    </script>
+    <!-- Script for adding product to cart -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            document.querySelector(".addto-cart-btn").addEventListener("click", function (e) {
+                e.preventDefault();
+                
+                let shoeId = this.getAttribute("data-shoe-id");
+                let messageBox = document.getElementById("cart-message");
+                
+
+                fetch("{% url 'cart:add_to_cart' shoe.id %}", {
+
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "X-CSRFToken": "{{ csrf_token }}"
+                    },
+                    body: "shoe_id=" + shoeId
+                })
+                .then(response => {
+                    if (response.redirected) {
+                        window.location.href = response.url;
+                    } else {
+                        return response.json();
+                    }
+                })
+                .then(data => {
+                    if (data) {
+                        messageBox.innerText = data.message || "Product added to cart!";
+                
+                        if (data.cart_item_count !== undefined) {
+                            const cartCountElement = document.querySelector('.cart-count');
+                            if (cartCountElement) {
+                                cartCountElement.textContent = data.cart_item_count;
+                            }
+                        }
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+            });
+        });
     </script>
 {% endblock content %}
