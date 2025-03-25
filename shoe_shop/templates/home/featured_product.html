@@ -44,7 +44,9 @@
                                 <a href="{% url 'productDetails' shoe.id %}"><i class="far fa-eye"></i></a>
                             </div>
                             <div class="cta-single cta-wishlist">
-                                <a href="{% url 'wishlist' %}"><i class="far fa-heart"></i></a>
+                                <a href="#" class="wishlist-btn" data-shoe-id="{{ shoe.id }}">
+                                    <i class="far fa-heart"></i>
+                                </a> 
                             </div>
                             <div class="cta-single cta-addtocart">
                                 <form action="{% url 'cart:add_to_cart' shoe.id %}" method="POST">
@@ -67,3 +69,34 @@
     </div>
 </div>
 <!-- ..::Featured Product Section End Here::.. -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".wishlist-btn").forEach(button => {
+            button.addEventListener("click", function (e) {
+                e.preventDefault();
+
+                let shoeId = this.getAttribute("data-shoe-id");
+
+                fetch("{% url 'add_to_wishlist' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "X-CSRFToken": "{{ csrf_token }}"
+                    },
+                    body: "shoe_id=" + shoeId
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.added) {
+                        this.classList.add("active");  
+                        
+                    } else {
+                        this.classList.remove("active");
+                        
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+            });
+        });
+    });
+</script>
