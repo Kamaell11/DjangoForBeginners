@@ -26,6 +26,7 @@
                             <i class="far fa-star"></i>
                         {% endfor %}
                         <span>{{ reviews.count }} Reviews</span>
+                        
                     </div>
                 </div>
                 <h2 class="product-title">{{ shoe.name }} <span class="stock">In Stock</span></h2>
@@ -53,6 +54,16 @@
                     <span class="catagorys product-unipue"><span>Categories: </span> {{ shoe.category.name }}</span>
                     <span class="tags product-unipue"><span>Tags: </span> {{ shoe.name }}</span>
                 </div>
+                {% if user.is_authenticated %}
+                    <button id="show-review-form" class="btn">Add a Review</button>
+                    <form id="review-form" method="post" style="display: none;">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit">Submit Review</button>
+                    </form>
+                {% else %}
+                    <p><a href="{% url 'login' %}">Log in</a> to leave a review.</p>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -119,6 +130,17 @@
             })
             .catch(error => console.error("Error:", error));
         });
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+        let showReviewBtn = document.getElementById("show-review-form");
+        let reviewForm = document.getElementById("review-form");
+
+        if (showReviewBtn && reviewForm) {
+            showReviewBtn.addEventListener("click", function () {
+                reviewForm.style.display = "block";
+                this.style.display = "none"; 
+            });
+        }
     });
 </script>
 
