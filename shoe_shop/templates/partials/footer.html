@@ -154,14 +154,22 @@
                     <h3 class="footer-widget-title">Get Newsletter</h3>
                     <div class="footer-widget newsletter-widget">
                         <span class="widget-text">Get 10% off your first order! Hurry up</span>
-                        <div class="input-div">
-                            <input type="email" placeholder="Enter email address">
-                        </div>
-                        <a href="#0" class="subscribe-btn">Subscribe Now <i class="fal fa-long-arrow-right"></i></a>
+                        <form id="footer-newsletter-form">
+                            <div class="input-div">
+                                <input type="text" id="footer-name" name="name" placeholder="Your name" required>
+                                <div class="input-icon"><i class="far fa-user"></i></div>
+                            </div>
+                            <div class="input-div">
+                                <input type="email" id="footer-email" name="email" placeholder="Enter email address" required>
+                                <div class="input-icon"><i class="far fa-envelope"></i></div>
+                            </div>
+                            <button type="submit" class="subscribe-btn">Subscribe Now <i class="fal fa-long-arrow-right"></i></button>
+                        </form>
+                        <p id="footer-newsletter-message"></p>
                     </div>
                 </div>
             </div>
-            <div class="footer-bottombar">
+            <div class="footer-bottombar" style="border-top: none;">
                 <div class="app-download">
                     <span class="download-text">Order faster with our App!</span>
 
@@ -180,3 +188,32 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("footer-newsletter-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+    
+            let formData = new FormData(this);
+    
+            fetch("/newsletter/subscribe/", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                let messageBox = document.getElementById("footer-newsletter-message");
+                messageBox.innerText = data.message;
+                if (data.success) {
+                    messageBox.style.color = "green";
+                } else {
+                    messageBox.style.color = "red";
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    });
+    </script>

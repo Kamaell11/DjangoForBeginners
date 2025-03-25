@@ -133,6 +133,7 @@ def product_details(request, shoe_id):
     full_stars = int(avg_rating) if avg_rating else 0
     empty_stars = 5 - full_stars
     cart_item_count = 0
+    form = None
     reviews = Review.objects.filter(shoe=shoe)
     if request.user.is_authenticated:
         cart = Cart.objects.filter(user=request.user).first()
