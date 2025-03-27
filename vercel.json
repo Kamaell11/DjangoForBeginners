@@ -1,0 +1,15 @@
+{
+    "builds": [
+      {
+        "src": "shoe_shop/manage.py",
+        "use": "@vercel/python"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "shoe_shop/manage.py"
+      }
+    ]
+  }
+  
