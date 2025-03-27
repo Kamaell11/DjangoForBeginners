@@ -1,0 +1,13 @@
+asgiref==3.8.1
+Django==5.0
+django-material==1.12.0
+django-theme-material-kit==1.0.25
+djangorestframework==3.15.2
+gunicorn==21.2.0
+packaging==24.2
+pillow==11.1.0
+python-dotenv==1.0.1       
+six==1.17.0
+sqlparse==0.5.3
+str2bool==1.1
+whitenoise==6.6.0
