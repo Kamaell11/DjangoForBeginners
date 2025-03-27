@@ -1,14 +1,18 @@
 {
+    "version": 2,
     "builds": [
       {
-        "src": "shoe_shop/manage.py",
-        "use": "@vercel/python"
+        "src": "manage.py",
+        "use": "@vercel/python",
+        "config": {
+          "maxDuration": 30
+        }
       }
     ],
     "routes": [
       {
         "src": "/(.*)",
-        "dest": "shoe_shop/manage.py"
+        "dest": "manage.py"
       }
     ]
   }
