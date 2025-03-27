@@ -1,0 +1,147 @@
+{% extends '../layout/layout.html' %}
+
+{% block content %}
+
+<!-- ..::Product-details Section Start Here::.. -->
+<div class="rts-product-details-section section-gap">
+    <div class="container">
+        <div class="details-product-area mb--70">
+            <div class="product-thumb-area">
+                <div class="cursor"></div>
+                <div class="thumb-wrapper one filterd-items figure">
+                    <div class="product-thumb zoom" onmousemove="zoom(event)"
+                        style="background-image: url('{{ shoe.image.url }}')">
+                        <img src="{{ shoe.image.url }}" alt="{{ shoe.name }}">
+                    </div>
+                </div>
+            </div>
+            <div class="contents">
+                <div class="product-status">
+                    <span class="product-category">{{ shoe.category.name }}</span>
+                    <div class="rating-stars-group">
+                        {% for _ in ''|rjust:full_stars %}
+                            <i class="fas fa-star"></i>
+                        {% endfor %}
+                        {% for _ in ''|rjust:empty_stars %}
+                            <i class="far fa-star"></i>
+                        {% endfor %}
+                        <span>{{ reviews.count }} Reviews</span>
+                        
+                    </div>
+                </div>
+                <h2 class="product-title">{{ shoe.name }} <span class="stock">In Stock</span></h2>
+                <span class="product-price">${{ shoe.price }}</span>
+                <p>{{ shoe.description }}</p>
+                <div class="product-bottom-action">
+                    <div class="cart-edit">
+                        <div class="quantity-edit action-item">
+                            <button class="button"><i class="fal fa-minus minus"></i></button>
+                            <input type="text" class="input" value="01" />
+                            <button class="button plus">+<i class="fal fa-plus plus"></i></button>
+                        </div>
+                    </div>
+                    <a href="#" class="addto-cart-btn action-item" data-shoe-id="{{ shoe.id }}">
+                        <i class="rt-basket-shopping"></i> Add To Cart
+                    </a>
+                    <span id="cart-message" style="margin-left: 10px; color: green;"></span>
+                    <a href="#" class="wishlist-btn action-item" data-shoe-id="{{ shoe.id }}">
+                        <i class="rt-heart"></i>
+                    </a>
+                    <span id="wishlist-message" style="margin-left: 10px; color: green;"></span>
+                </div>
+                <div class="product-uniques">
+                    <span class="sku product-unipue"><span>SKU: </span> {{ shoe.id }}</span>
+                    <span class="catagorys product-unipue"><span>Categories: </span> {{ shoe.category.name }}</span>
+                    <span class="tags product-unipue"><span>Tags: </span> {{ shoe.name }}</span>
+                </div>
+                {% if user.is_authenticated %}
+                    <button id="show-review-form" class="btn">Add a Review</button>
+                    <form id="review-form" method="post" style="display: none;">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit">Submit Review</button>
+                    </form>
+                {% else %}
+                    <p><a href="{% url 'login' %}">Log in</a> to leave a review.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ..::Product-details Section End Here::.. -->
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelector(".wishlist-btn").addEventListener("click", function (e) {
+            e.preventDefault();  
+            let shoeId = this.getAttribute("data-shoe-id");
+            let messageBox = document.getElementById("wishlist-message");
+            fetch("{% url 'add_to_wishlist' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: "shoe_id=" + shoeId
+            })
+            .then(response => response.json())
+            .then(data => {
+                messageBox.innerText = data.message;
+                if (data.added) {
+                    this.classList.add("active");  
+                } else {
+                    this.classList.remove("active");
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelector(".addto-cart-btn").addEventListener("click", function (e) {
+            e.preventDefault();
+            let shoeId = this.getAttribute("data-shoe-id");
+            let messageBox = document.getElementById("cart-message");
+            fetch("{% url 'cart:add_to_cart' shoe.id %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: "shoe_id=" + shoeId
+            })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                } else {
+                    return response.json();
+                }
+            })
+            .then(data => {
+                if (data) {
+                    messageBox.innerText = data.message || "Product added to cart!";
+                    if (data.cart_item_count !== undefined) {
+                        const cartCountElement = document.querySelector('.cart-count');
+                        if (cartCountElement) {
+                            cartCountElement.textContent = data.cart_item_count;
+                        }
+                    }
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+        let showReviewBtn = document.getElementById("show-review-form");
+        let reviewForm = document.getElementById("review-form");
+
+        if (showReviewBtn && reviewForm) {
+            showReviewBtn.addEventListener("click", function () {
+                reviewForm.style.display = "block";
+                this.style.display = "none"; 
+            });
+        }
+    });
+</script>
+
+{% endblock content %}

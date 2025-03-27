@@ -11,7 +11,7 @@ export $(shell sed 's/=.*//' .env)
 
 # Variables for Django project
 PROJECT_NAME = $(DJANGO_PROJECT_NAME)
-APP_NAME = $(DJANGO_APP_NAME)
+DJANGO_APP_NAME = $(filter-out $@,$(MAKECMDGOALS))
 
 # Install dependencies
 install:
@@ -31,7 +31,7 @@ migrate:
 	$(PYTHON) $(PROJECT_NAME)/manage.py migrate
 
 # Making new Django app
-startapp:
+app:
 	@echo "Making new Django app..."
 	$(PYTHON) $(PROJECT_NAME)/manage.py startapp $(DJANGO_APP_NAME)
 
@@ -72,3 +72,31 @@ clean:
 
 # Installing dependencies and running server
 dev: install run
+
+
+# -----------------------------
+# Docker support
+# -----------------------------
+
+# Nazwa obrazu Docker
+IMAGE_NAME = django_app
+
+# Budowanie obrazu Docker
+docker-build:
+	@echo "Building Docker image..."
+	docker build -t $(IMAGE_NAME) .
+
+# Uruchamianie kontenera
+docker-run:
+	@echo "Running Docker container..."
+	docker run --rm -p 8000:8000 --name $(IMAGE_NAME)_container $(IMAGE_NAME)
+
+# Usuwanie kontenera
+docker-stop:
+	@echo "Stopping Docker container..."
+	docker stop $(IMAGE_NAME)_container || true
+
+# Usuwanie obrazu Docker
+docker-clean:
+	@echo "Removing Docker image..."
+	docker rmi $(IMAGE_NAME) || true

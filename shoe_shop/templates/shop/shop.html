@@ -1,0 +1,154 @@
+{% extends '../layout/layout.html' %}
+
+{% block script %}
+    <script src="/static/js/vendors/jquery.nstSlider.min.js"></script> 
+    <script src="/static/js/vendors/zoom.js"></script> 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var minInput = document.getElementById("min_price");
+            var maxInput = document.getElementById("max_price");
+            var minOutput = document.getElementById("min_price_value");
+            var maxOutput = document.getElementById("max_price_value");
+
+            function updateValues() {
+                minOutput.textContent = minInput.value + " zł";
+                maxOutput.textContent = maxInput.value + " zł";
+            }
+
+            minInput.addEventListener("input", updateValues);
+            maxInput.addEventListener("input", updateValues);
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+
+<!-- ..::Shop Section Start Here::.. -->
+<div class="rts-shop-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-9">
+                
+                <div class="shop-product-topbar">
+                    <span class="items-onlist">
+                        Pokazano {{ shoes.start_index }}-{{ shoes.end_index }} z {{ shoes.paginator.count }} wyników
+                    </span>
+
+                    <div class="filter-area">
+                        <form method="GET" id="sortForm">
+                            <select name="sort_by" id="sortSelect">
+                                <option value="">Sortuj według</option>
+                                <option value="price_asc" {% if request.GET.sort_by == "price_asc" %}selected{% endif %}>Cena: rosnąco</option>
+                                <option value="price_desc" {% if request.GET.sort_by == "price_desc" %}selected{% endif %}>Cena: malejąco</option>
+                                <option value="latest" {% if request.GET.sort_by == "latest" %}selected{% endif %}>Najnowsze</option>
+                            </select>
+                        </form>
+                    </div>
+
+                    <script>
+                        document.getElementById('sortSelect').addEventListener('change', function() {
+                            document.getElementById('sortForm').submit();
+                        });
+                    </script>
+                </div>
+
+               
+
+                <div class="products-area products-area3">
+                    <div class="row justify-content-center">
+                        {% for shoe in shoes %}
+                            <div class="col-xl-3 col-md-4 col-sm-6">
+                                <div class="product-item product-item2 element-item3">
+                                    <a href="{% url 'productDetails' shoe.id %}" class="product-image">
+                                        <img src="{{ shoe.image.url }}" alt="{{ shoe.name }}">
+                                    </a>
+                                    <div class="bottom-content">
+                                        <span class="product-category">{{ shoe.category.name }}</span>
+                                        <a href="{% url 'productDetails' shoe.id %}" class="product-name">{{ shoe.name }}</a>
+                                        <div class="action-wrap">
+                                            <span class="product-price">{{ shoe.price }} zł</span>
+                                            <a href="{% url 'cart:add_to_cart' shoe.id %}" class="addto-cart">
+                                                <i class="fal fa-shopping-cart"></i> Dodaj do koszyka
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <p>Brak produktów w tej kategorii.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Paginacja -->
+                <div class="product-pagination-area mt--20">
+                    {% if shoes.has_previous %}
+                        <a href="?page=1{% if request.GET.sort_by %}&sort_by={{ request.GET.sort_by }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}" class="prev">
+                            <i class="far fa-long-arrow-left"></i> Pierwsza
+                        </a>
+                        <a href="?page={{ shoes.previous_page_number }}{% if request.GET.sort_by %}&sort_by={{ request.GET.sort_by }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}">
+                            Poprzednia
+                        </a>
+                    {% endif %}
+
+                    <span>Strona {{ shoes.number }} z {{ shoes.paginator.num_pages }}</span>
+
+                    {% if shoes.has_next %}
+                        <a href="?page={{ shoes.next_page_number }}{% if request.GET.sort_by %}&sort_by={{ request.GET.sort_by }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}">
+                            Następna
+                        </a>
+                        <a href="?page={{ shoes.paginator.num_pages }}{% if request.GET.sort_by %}&sort_by={{ request.GET.sort_by }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}">
+                            Ostatnia <i class="far fa-long-arrow-right"></i>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-xl-3">
+                <div class="side-sticky">
+                    <!-- Filtrowanie po cenie -->
+                    <div class="shop-side-action">
+                        <div class="action-item">
+                            <div class="action-top">
+                                <span class="action-title">Filtruj po cenie</span>
+                            </div>
+                            <form method="GET" class="price-filter-form">
+                                <input type="hidden" name="sort_by" value="{{ request.GET.sort_by }}">
+                                <div class="price-slider">
+                                    <label for="min_price">Min: <span id="min_price_value">{{ request.GET.min_price|default:0 }} zł</span></label>
+                                    <input type="range" name="min_price" id="min_price" min="0" max="500" value="{{ request.GET.min_price|default:0 }}" class="slider">
+                                    <label for="max_price">Max: <span id="max_price_value">{{ request.GET.max_price|default:500 }} zł</span></label>
+                                    <input type="range" name="max_price" id="max_price" min="0" max="500" value="{{ request.GET.max_price|default:500 }}" class="slider">
+                                </div>
+                                <button type="submit" class="filter-button">Filtruj</button>
+                                <a href="{% url 'shop' %}">Anuluj</a>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Lista kategorii -->
+                    <div class="shop-side-action">
+                        <div class="action-item">
+                            <div class="action-top">
+                                <span class="action-title">Kategorie</span>
+                            </div>
+                            <ul class="category-list">
+                                {% for cat in categories %}
+                                    <li>
+                                        <a href="{% url 'category_detail' cat.id %}">
+                                            {{ cat.name }} ({{ cat.product_count }})
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+              
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ..::Shop Section Section End Here::.. -->
+
+{% endblock content %}

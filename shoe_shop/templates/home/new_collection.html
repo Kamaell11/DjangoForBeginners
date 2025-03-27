@@ -1,0 +1,23 @@
+<div class="rts-new-collection-section section-gap">
+    <div class="container">
+        <div class="recent-products-header section-header">
+        </div>
+        <div class="swiper rts-cmmnSlider-over" data-swiper="pagination">
+            <div class="swiper-wrapper">
+                {% for category_name, shoe in category_shoes.items %}
+                <div class="swiper-slide">
+                    <div class="collection-item">
+                        <a href="{% url 'category_detail' shoe.category.id %}">
+                            <img src="{{ shoe.image.url }}" alt="{{ shoe.name }}">
+                        </a>
+                        <p class="item-quantity">{{ shoe.stock }} <span>items</span></p>
+                        <a href="{% url 'category_detail' shoe.category.id %}" class="item-catagory-box">
+                            <h3 class="title">{{ shoe.category.name }}</h3>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,102 @@
+<!-- ..::Featured Product Section Start Here::.. -->
+<div class="rts-featured-product-section1">
+    <div class="container">
+        <div class="rts-featured-product-section-inner">
+            <div class="section-header section-header3 text-center">
+                <div class="wrapper">
+                    <div class="sub-content">
+                        <img class="line-1" src="/static/images/banner/wvbo-icon.png" alt="">
+                        <span class="sub-text">Featured</span>
+                        <img class="line-2" src="/static/images/banner/wvbo-icon.png" alt="">
+                    </div>
+                    <h2 class="title">FEATURED PRODUCT</h2>
+                </div>
+            </div>
+            <div class="row">
+                {% for shoe in featured_products %}
+                <div class="col-xl-3 col-md-4 col-sm-6 col-12">
+                    <div class="product-item element-item1">
+                        <a href="{% url 'productDetails' shoe.id %}" class="product-image">
+                            <div class="image-vari1 image-vari">
+                                {% if shoe.image %}
+                                    <img src="{{ shoe.image.url }}" alt="product-image">
+                                {% else %}
+                                    <img src="/static/images/default_shoe_image.png" alt="default-product-image">
+                                {% endif %}
+                            </div>
+                        </a>
+                        <div class="bottom-content">
+                            <div class="star-rating">
+                                {% for _ in "12345" %}
+                                    <i class="fas fa-star"></i>
+                                {% endfor %}
+                            </div>
+                            <a href="{% url 'productDetails' shoe.id %}" class="product-name">{{ shoe.name }}</a>
+                            <div class="action-wrap">
+                                <span class="price">${{ shoe.price }}</span>
+                            </div>
+                        </div>
+                        <div class="quick-action-button">
+                            <div class="cta-single cta-plus">
+                                <a href="#"><i class="rt-plus"></i></a>
+                            </div>
+                            <div class="cta-single cta-quickview">
+                                <a href="{% url 'productDetails' shoe.id %}"><i class="far fa-eye"></i></a>
+                            </div>
+                            <div class="cta-single cta-wishlist">
+                                <a href="#" class="wishlist-btn" data-shoe-id="{{ shoe.id }}">
+                                    <i class="far fa-heart"></i>
+                                </a> 
+                            </div>
+                            <div class="cta-single cta-addtocart">
+                                <form action="{% url 'cart:add_to_cart' shoe.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit"><i class="rt-basket-shopping"></i> </button>
+                                </form>
+                            </div>
+                        </div>
+                        {% if shoe.discount %}
+                        <div class="product-features">
+                            <div class="discount-tag product-tag">-{{ shoe.discount }}%</div>
+                            <div class="new-tag product-tag">HOT</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ..::Featured Product Section End Here::.. -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".wishlist-btn").forEach(button => {
+            button.addEventListener("click", function (e) {
+                e.preventDefault();
+
+                let shoeId = this.getAttribute("data-shoe-id");
+
+                fetch("{% url 'add_to_wishlist' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "X-CSRFToken": "{{ csrf_token }}"
+                    },
+                    body: "shoe_id=" + shoeId
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.added) {
+                        this.classList.add("active");  
+                        
+                    } else {
+                        this.classList.remove("active");
+                        
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+            });
+        });
+    });
+</script>

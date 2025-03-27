@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" class="darkmode" data-theme="light">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+{% include '../partials/head.html' with css=css %}
+
+<body>
+    
+    <!-- ..::Preloader Section Start Here::.. -->
+    {% include '../partials/preloader.html' %}
+    <!-- ..::Preloader End Here::.. -->
+
+    <div class="anywere"></div>
+
+    <!-- Header -->
+    {% if title %}
+        {% include '../partials/header.html' %}
+    {% endif %}
+
+    <!-- Banner (opcjonalnie) -->
+    {% if banner %}
+        {% include '../partials/banner.html' %}
+    {% endif %}
+
+    <!-- Główna zawartość strony -->
+    {% block content %}
+    {% endblock %}
+
+    <!-- Stopka -->
+    {% if footer %}
+        {% include '../partials/footer.html' %}
+    {% endif %}
+
+    <!-- Skrypty i dodatkowe elementy -->
+    {% include '../partials/scroll.html' %}
+    {% include '../partials/script.html' with script=script %}
+
+    <!-- Dodatkowe skrypty specyficzne dla strony -->
+    {% block script %}
+    {% endblock %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".show-password-input").forEach(function (eyeIcon) {
+            eyeIcon.addEventListener("click", function () {
+                let passwordInput = this.previousElementSibling;
+                if (passwordInput.type === "password") {
+                    passwordInput.type = "text";
+                    this.textContent = "🙈"; 
+                } else {
+                    passwordInput.type = "password";
+                    this.textContent = "👁️"; 
+                }
+            });
+        });
+    });
+</script>
+</body>
+
+</html>

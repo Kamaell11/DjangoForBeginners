@@ -1,0 +1,32 @@
+{% extends '../layout/layout.html' %}
+
+{% block script %}
+        <script src="/static/js/vendors/zoom.js"></script> 
+{% endblock %} 
+
+{% block content %}
+
+
+<!-- ..::Offer Section Start Here::.. -->
+{% include 'home/offer_section.html' %}
+<!-- ..::Offer Section End Here::.. -->
+
+<!-- ..::New Collection Section Start Here::.. -->
+{% include 'home/new_collection.html' %}
+<!-- ..::New Collection Section End Here::.. -->
+
+<!-- ..::Deal Section Start Here::.. -->
+{% include 'home/deal_section.html' %}
+<!-- ..::Deal Section End Here::.. -->
+
+<!-- ..::Featured Product Section Start Here::.. -->
+{% include 'home/featured_product.html' %}
+<!-- ..::Featured Product Section End Here::.. -->
+
+<!-- ..::Newsletter Popup Start Here::.. -->
+{% include 'newsletter/newsletter_popup.html' %}
+<!-- ..::Newsletter Popup End Here::.. -->
+
+
+
+{% endblock content %}

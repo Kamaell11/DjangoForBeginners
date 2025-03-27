@@ -1,0 +1,50 @@
+<div class="rts-newsletter-popup">
+    <div class="newsletter-close-btn"><i class="fal fa-times"></i></div>
+    <div class="newsletter-inner">
+        <h3 class="newsletter-heading">Get Weekly Newsletter</h3>
+        <p>Step into style with our premium 3-Piece Sneaker Care Kit SS23. This complete footwear maintenance set features a contemporary design to keep your favorite kicks looking fresh.</p>
+        <form id="newsletter-form">
+            <div class="input-area">
+                <div class="input-div">
+                    <input type="text" id="name" name="name" placeholder="Your name" required>
+                    <div class="input-icon"><i class="far fa-user"></i></div>
+                </div>
+                <div class="input-div">
+                    <input type="email" id="email" name="email" placeholder="Email address" required>
+                    <div class="input-icon"><i class="far fa-envelope"></i></div>
+                </div>
+            </div>
+            <button type="submit" class="subscribe-btn">Subscribe Now <i class="fal fa-long-arrow-right ml--5"></i></button>
+        </form>
+        <p id="newsletter-message"></p>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("newsletter-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        let formData = new FormData(this);
+
+        fetch("/newsletter/subscribe/", {
+            method: "POST",
+            body: formData,
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}"
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            let messageBox = document.getElementById("newsletter-message");
+            messageBox.innerText = data.message;
+            if (data.success) {
+                messageBox.style.color = "green";
+            } else {
+                messageBox.style.color = "red";
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    });
+});
+</script>

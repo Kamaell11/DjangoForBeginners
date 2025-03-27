@@ -1,0 +1,252 @@
+{% extends 'layout/layout.html' %}
+
+{% block content %}
+
+<div class="rts-account-section section-gap">
+    <div class="container custom-container">
+        <div class="account-inner">
+            <div class="account-side-navigation">
+                <button class="filter-btn active" data-show=".dashboard"><i class="fal fa-chart-bar"></i> Dashboard</button>
+                <button class="filter-btn" data-show=".orders"><i class="fal fa-shopping-cart"></i> Orders</button>
+                <button class="filter-btn" data-show=".address"><i class="fal fa-map-marker-alt"></i> Address</button>
+                <button class="filter-btn" data-show=".wishlist"><i class="fal fa-shopping-basket"></i> Wishlist</button>
+
+                <form action="{% url 'logout' %}" method="post" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit" class="filter-btn"><i class="fal fa-long-arrow-left"></i> Logout</button>
+                </form>
+            </div>
+
+            <div class="account-main-area">
+                <div class="account-main dashboard filterd-items">
+                    <div class="account-profile-area">
+                        <div class="d-block">
+                            <span class="profile-name"><span>Hi,</span> {{ user.username }}</span>
+                            <span class="profile-date d-block">{{ user.date_joined|date:"F j, Y" }}</span>
+                        </div>
+                    </div>
+
+                    <div class="activity-box">
+                        <div class="activity-item">
+                            <div class="icon"><i class="fas fa-box-check"></i></div>
+                            <span class="title">Active Orders</span>
+                            <span class="value">{{ active_orders_count }}</span>
+                        </div>
+                        <div class="activity-item">
+                            <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <span class="title">Address</span>
+                            <span class="value">
+                                {{ request.session.billing_address|default:"No billing address provided." }}
+                            </span>
+                        </div>
+                        <div class="activity-item">
+                            <div class="icon"><i class="fas fa-heart"></i></div>
+                            <span class="title">Wishlist</span>
+                            <span class="value">
+                                {{ active_wishlist_count }}
+                            </span>
+                        </div>
+                        <form action="{% url 'logout' %}" method="post" class="logout-form">
+                            {% csrf_token %}
+                            <button type="submit" class="activity-item">
+                                <div class="icon"><i class="fas fa-sign-out-alt"></i></div>
+                                <span class="title">Logout</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="account-main orders filterd-items hide">
+                    <h2 class="mb--30">My Orders</h2>
+                    <table class="table">
+                        <thead>
+                            <tr class="top-tr">
+                                <th>Order</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                            <tr>
+                                <td>#{{ order.id }}</td>
+                                <td>{{ order.created_at|date:"F j, Y" }}</td>
+                                <td>{{ order.get_status_display }}</td>
+                                <td>${{ order.total_price }} for {{ order.items.count }} item{{ order.items.count|pluralize }}</td>
+                                <td><a href="{% url 'order_detail' order.id %}" class="btn-small d-block">View</a></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5">No orders found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="account-main address filterd-items hide">
+                    <div class="row">
+                        <div class="col-xl-5 col-md-5">
+                            <div class="billing-address">
+                                <h2 class="mb--30">Billing Address</h2>
+                                <address>
+                                    {{ request.session.billing_address|default:"No billing address provided." }}
+                                </address>
+                                <a href="{% url 'edit_address' %}" class="btn-small">Edit</a>
+                            </div>
+                        </div>
+                        <div class="col-xl-5 col-md-5">
+                            <div class="shipping-address">
+                                <h4 class="mb--30">Shipping Address</h4>
+                                <address>
+                                    {{ request.session.shipping_address|default:"No shipping address provided." }}
+                                </address>
+                                <a href="{% url 'edit_address' %}" class="btn-small">Edit</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="account-main wishlist filterd-items hide">
+                    <h2 class="mb--30">My Wishlist</h2>
+                    
+                    <div class="row">
+                        {% for shoe in wishlist_items %}
+                        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-4">
+                            <div class="card h-100">
+                                <img src="{{ shoe.image.url }}" class="card-img-top" alt="{{ shoe.name }}" style="height: 200px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ shoe.name }}</h5>
+                                    <p class="card-text">${{ shoe.price }}</p>
+                                </div>
+                                <div class="card-footer bg-white">
+                                    <form method="post" action="{% url 'remove_from_wishlist' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="shoe_id" value="{{ shoe.id }}">
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash-alt"></i> Remove
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="col-12">
+                            <div class="alert alert-info">
+                                Your wishlist is currently empty.
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="account-main accountdtls filterd-items hide">
+                    <div class="login-form">
+                        <div class="section-title">
+                            <h2>Login</h2>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <form>
+                                    <div class="form">
+                                        <input type="text" class="form-control" id="username" placeholder="Username or email address*" required="">
+                                    </div>
+                                    <div class="form">
+                                        <div class="password-input">
+                                            <input type="password" class="form-control" id="password" placeholder="Password*" required="">
+                                            <span class="show-password-input"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form">
+                                        <input type="checkbox" class="form-check-input" id="remember">
+                                        <label for="remember" class="form-label">Remember Me</label>
+                                    </div>
+                                    <div class="form">
+                                        <button type="submit" class="btn">Login <i class="fal fa-long-arrow-right"></i></button>
+                                    </div>
+                                    <a class="forgot-password" href="#">Lost your password?</a>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="offer-ad mt-4 mx-auto px-3 px-md-4 px-lg-5" style="max-width: 1200px; width: auto;">
+                    <p>From your account dashboard you can view your recent orders, manage your shipping and billing addresses, and edit your password.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // 1. Obsługa przełączania sekcji konta
+        const params = new URLSearchParams(window.location.search);
+        const section = params.get("section");
+        const sections = document.querySelectorAll(".account-main");
+    
+        sections.forEach(sec => sec.classList.add("hide"));
+    
+        if (section) {
+            const target = document.querySelector("." + section);
+            if (target) {
+                target.classList.remove("hide");
+            }
+        } else {
+            document.querySelector(".dashboard").classList.remove("hide");
+        }
+    
+        // 2. Obsługa usuwania z wishlisty
+        document.querySelectorAll('.remove-wishlist-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const form = this;
+                const productCard = form.closest('.col-xl-3, .col-lg-4, .col-md-6, .col-sm-6, .col-12');
+                
+                fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form),
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value
+                    },
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Animacja znikania
+                        productCard.style.transition = 'opacity 0.3s';
+                        productCard.style.opacity = '0';
+                        
+                        // Usunięcie elementu po animacji
+                        setTimeout(() => {
+                            productCard.remove();
+                            
+                            // Aktualizacja licznika
+                            const wishlistCount = document.querySelector('.wishlist-count');
+                            if (wishlistCount) {
+                                const currentCount = parseInt(wishlistCount.textContent);
+                                wishlistCount.textContent = currentCount - 1;
+                            }
+                            
+                            // Jeśli lista jest pusta, pokaż komunikat
+                            const wishlistContainer = document.querySelector('.account-main.wishlist .row');
+                            if (wishlistContainer && wishlistContainer.children.length === 0) {
+                                wishlistContainer.innerHTML = `
+                                    <div class="col-12">
+                                        <div class="alert alert-info">
+                                            Your wishlist is currently empty.
+                                        </div>
+                                    </div>
+                                `;
+                            }
+                        }, 300);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    });
+    </script>
+{% endblock content %}

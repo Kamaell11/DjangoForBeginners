@@ -1,0 +1,147 @@
+<header id="rtsHeader">
+    <!-- Topbar  -->
+    <div class="header-topbar header-topbar1">
+        <div class="container">
+            <div class="header-top-area">
+                <div class="slider-div">
+                    <div class="swiper rts-topSlide1">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <h3 class="welcome-text"> Open Door To A worlds Of Fashion<a href="#">Discover Now</a></h3>
+                            </div>
+                            <div class="swiper-slide">
+                                <h3 class="welcome-text"> Enjoy free shipping on orders 100$ up<a href="#">Discover Now</a></h3>
+                            </div>
+
+                        </div>
+                        <div class="slider-navigation2">
+                            <div class="swiper-button-prev slider-btn prev"><i class="rt rt-arrow-left-long"></i></div>
+                            <div class="swiper-button-next slider-btn next"><i class="rt rt-arrow-right-long"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu (About Us, My Account, Wishlist, Order Tracking) -->
+    <div class="header-topbar-menu-area">
+        <div class="container">
+            <div class="menu-area1">
+                <div class="menu-item">
+                    <nav class="nav navbar">
+                        <div class="navbar-menu">
+                            <ul>
+                                <li><a href="{% url 'account' %}?section=dashboard">My Account</a></li>
+                                <li><a href="{% url 'account' %}?section=wishlist">Wishlist</a></li>
+                                <li><a href="{% url 'account' %}?section=orders">Order Tracking</a></li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+                <div class="menu-area-right-side">
+                    <div class="contact"><i aria-hidden="true" class="fas fa-phone"></i>Need help? <strong>Call us: <a href="call:0020500">+ 0020 500</a></strong></div>
+                    <div class="topbar-select-area">
+                        <select class="topbar-select custom-select">
+                            <option value="eng">English</option>
+                            <option value="esp">Español</option>
+                            <option value="pl">Polish</option>
+                        </select>
+                        <select class="topbar-select custom-select2">
+                            <option value="usd">USD</option>
+                            <option value="eur">Euro</option>
+                            <option value="pln">PLN</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar (logo, menu ) -->
+    <div class="navbar-sticky">
+        <div class="container">
+            <div class="navbar-part navbar-part1">
+                <div class="navbar-inner">
+                    <!-- Left side: Logo i hamburger -->
+                    <div class="left-side">
+                        <div class="hamburger-1">
+                            <a href="{% url 'home' %}" class="nav-menu-link">
+                                <span class="dot1"></span>
+                                <span class="dot2"></span>
+                                <span class="dot3"></span>
+                                <span class="dot4"></span>
+                                <span class="dot5"></span>
+                                <span class="dot6"></span>
+                                <span class="dot7"></span>
+                                <span class="dot8"></span>
+                                <span class="dot9"></span>
+                            </a>
+                        </div>
+                        <h3>Shoe Shop</h3>
+                    </div>
+
+                    <!-- Center: Menu  -->
+                    <div class="rts-menu">
+                        <nav class="menus menu-toggle">
+                            <ul class="nav__menu">
+                                <li><a class="menu-item active1" href="{% url 'home' %}">Home</a></li>
+                                <li><a class="menu-item" href="{% url 'shop' %}">Shop</a></li>
+                                
+                                
+                            </ul>
+                        </nav>
+                    </div>
+
+                    <!-- Right side: (search, cart, account) -->
+                    <div class="header-action-items header-action-items1">
+                        <div class="search-part">
+                            <div class="search-icon action-item icon"><i class="rt-search"></i></div>
+                            <div class="search-input-area">
+                                <div class="container">
+                                    <div class="search-input-inner">
+                                        <div class="input-div">
+                                            <input id="searchInput1" class="search-input" type="text" placeholder="Search by keyword or #">
+                                        </div>
+                                        <div class="search-close-icon"><i class="rt-xmark"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="auth-buttons">
+                            {% if user.is_authenticated %}
+                            
+                                <div class="header-action-items">
+                                    <a href="{% url 'account' %}" class="action-item icon" title="Moje konto">
+                                        <i class="fas fa-user"></i>
+                                    </a>
+                                    <form action="{% url 'logout' %}" method="post" class="logout-form">
+                                        {% csrf_token %}
+                                        <button type="submit" class="action-item icon" title="Wyloguj">
+                                            <i class="fas fa-sign-out-alt"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            {% else %}
+                               
+                                <a href="{% url 'login' %}" class="action-item icon" title="Zaloguj się">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                </a>
+                            {% endif %}
+                        </div>
+                        
+                        
+                        <div class="cart action-item">
+                            <div class="cart-nav">
+                                <div class="cart-icon icon">
+                                    <a href="{% url 'cart:cart' %}"><i aria-hidden="true" class="fas fa-shopping-basket"></i></a>
+                                    <span class="wishlist-dot icon-dot">{{ cart_item_count }}</span>  
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

@@ -1,0 +1,200 @@
+{% extends '../layout/layout.html' %}
+
+{% block script %}
+<script src="/static/js/vendors/zoom.js"></script> 
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Dynamiczne obliczanie całkowitej kwoty z wysyłką
+    const shippingOptions = document.querySelectorAll('input[name="shipping"]');
+    const subtotal = parseFloat('{{ cart.get_total_price|default:0 }}');
+    const grandTotalElement = document.querySelector('.total-price');
+    
+    function calculateTotal() {
+        const selectedShipping = document.querySelector('input[name="shipping"]:checked')?.value || 'flat_rate';
+        let shippingCost = selectedShipping === 'flat_rate' ? 10.00 : 0;
+        
+        const grandTotal = subtotal + shippingCost;
+        grandTotalElement.textContent = "$" + grandTotal.toFixed(2);
+    }
+    
+    shippingOptions.forEach(option => {
+        option.addEventListener("change", calculateTotal);
+    });
+    
+    // Inicjalne obliczenie
+    calculateTotal();
+
+    // Obsługa przycisku "Proceed To Checkout"
+    document.querySelector('.procced-btn').addEventListener('click', async function(e) {
+        e.preventDefault();
+        
+        // Sprawdź czy koszyk nie jest pusty
+        const cartItemCount = parseInt('{{ cart.items.count }}');
+        if (cartItemCount === 0) {
+            alert('Your cart is empty!');
+            return;
+        }
+
+        try {
+            const response = await fetch('{% url "cart:create_order" %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    shipping_method: document.querySelector('input[name="shipping"]:checked')?.value || 'flat_rate'
+                })
+            });
+
+            const data = await response.json();
+            
+            if (data.success) {
+                // Przekieruj na stronę podziękowania z ID zamówienia
+                window.location.href = `/orders/thank-you/${data.order_id}/`;
+            } else {
+                throw new Error(data.message || 'Failed to create order');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error: ' + error.message);
+        }
+    });
+
+    // Obsługa zmiany ilości produktów
+    document.querySelectorAll('.quantity-edit .button').forEach(button => {
+        button.addEventListener('click', function() {
+            const itemId = this.getAttribute('data-item-id');
+            const input = this.parentElement.querySelector('.input');
+            let quantity = parseInt(input.value);
+
+            if (this.classList.contains('minus')) {
+                quantity = Math.max(1, quantity - 1);
+            } else {
+                quantity += 1;
+            }
+
+            input.value = quantity;
+            updateCartItem(itemId, quantity);
+        });
+    });
+
+    // Funkcja do aktualizacji ilości produktu w koszyku
+    async function updateCartItem(itemId, quantity) {
+        try {
+            const response = await fetch(`{% url 'cart:update_cart_item' 0 %}`.replace('0', itemId), {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `quantity=${quantity}`
+            });
+
+            const data = await response.json();
+            
+            if (!data.success) {
+                throw new Error('Failed to update cart');
+            }
+            
+            // Odśwież stronę po aktualizacji
+            window.location.reload();
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error updating cart: ' + error.message);
+        }
+    }
+});
+</script>
+{% endblock %} 
+{% block content %}
+<!-- ..::Cart Section Start Here::.. -->
+<div class="rts-cart-section">
+    <div class="container">
+        <h4 class="section-title">Your Shopping Cart</h4>
+        <div class="row justify-content-between">
+            <div class="col-xl-7">
+                <div class="cart-table-area">
+                    <table class="table table-bordered table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Product</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in cart.items.all %}
+                                <tr>
+                                    <td>
+                                        <div class="product-thumb">
+                                            <img src="{{ item.shoe.image.url }}" alt="{{ item.shoe.name }}">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="product-title-area">
+                                            <span class="pretitle">{{ item.shoe.category.name }}</span>
+                                            <h4 class="product-title">{{ item.shoe.name }}</h4>
+                                        </div>
+                                    </td>
+                                    <td><span class="product-price">${{ item.shoe.price|floatformat:2 }}</span></td>
+                                    <td>
+                                        <div class="cart-edit">
+                                            <div class="quantity-edit">
+                                                <button class="button minus" data-item-id="{{ item.id }}"><i class="fal fa-minus"></i></button>
+                                                <input type="text" class="input" value="{{ item.quantity }}" data-item-id="{{ item.id }}">
+                                                <button class="button plus" data-item-id="{{ item.id }}"><i class="fal fa-plus"></i></button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="last-td">
+                                        <a href="{% url 'cart:remove_from_cart' item.id %}" class="remove-btn">Remove</a>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center">Your cart is empty</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-xl-4">
+                <div class="checkout-box">
+                    <div class="checkout-box-inner">
+                        <div class="subtotal-area">
+                            <span class="title">Subtotal</span>
+                            <span class="subtotal-price">${{ cart.get_total_price|floatformat:2 }}</span>
+                        </div>
+                        <div class="shipping-check">
+                            <span class="title">Shipping</span>
+                            <div class="check-options">
+                                <div class="form-group">
+                                    <input type="radio" name="shipping" id="fltrt" value="flat_rate" checked>
+                                    <label class="check-title" for="fltrt">Flat rate: $10.00</label>
+                                </div>
+                                <div class="form-group">
+                                    <input type="radio" name="shipping" id="frsh" value="free_shipping">
+                                    <label class="check-title" for="frsh">Free shipping</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="total-area">
+                            <span class="title">Total</span>
+                            <span class="total-price">${{ cart.get_total_price|add:10|floatformat:2 }}</span>
+                        </div>
+                    </div>
+                    <button class="procced-btn" {% if not cart.items.count %}disabled{% endif %}>
+                        Proceed To Checkout
+                    </button>
+                    <a href="{% url 'shop' %}" class="continue-shopping"><i class="fal fa-long-arrow-left"></i> Continue Shopping</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ..::Cart Section End Here::.. -->
+{% endblock content %}
