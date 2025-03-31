@@ -1,27 +1,17 @@
 {
-    "builds": [
-      {
-        "src": "shoe_shop/shoe_shop/wsgi.py",
-        "use": "@vercel/python"
-      },
-      {
-        "src": "build_files.sh",
-        "use": "@vercel/static-build",
-        "config": { "distDir": "staticfiles" }
-      }
-    ],
-    "routes": [
-      {
-        "src": "/static/(.*)",
-        "dest": "/static/$1"
-      },
-      {
-        "src": "/(.*)",
-        "dest": "shoe_shop/shoe_shop/wsgi.py"
-      }
-    ],
-    "env": {
-      "DJANGO_SETTINGS_MODULE": "shoe_shop/shoe_shop.settings"
+  "builds": [
+    {
+      "src": "shoe_shop/shoe_shop/wsgi.py",
+      "use": "@vercel/python"
     }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "shoe_shop/shoe_shop/wsgi.py"
+    }
+  ],
+  "env": {
+    "DJANGO_SETTINGS_MODULE": "shoe_shop.settings"
   }
-  
+}
