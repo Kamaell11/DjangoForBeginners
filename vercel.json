@@ -19,6 +19,9 @@
         "src": "/(.*)",
         "dest": "shoe_shop/shoe_shop/wsgi.py"
       }
-    ]
+    ],
+    "env": {
+      "DJANGO_SETTINGS_MODULE": "shoe_shop.settings"
+    }
   }
   
