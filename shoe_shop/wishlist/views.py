@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Wishlist
 from shop.models import Shoe
 from django.http import JsonResponse
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
 @login_required
@@ -31,12 +32,11 @@ def remove_from_wishlist(request):
     if request.method == "POST":
         shoe_id = request.POST.get("shoe_id")
         shoe = get_object_or_404(Shoe, id=shoe_id)
-     
         wishlist = Wishlist.objects.get(user=request.user)
-        
         wishlist.shoes.remove(shoe)
         
-        return JsonResponse({"message": "Removed from wishlist", "removed": True})
+        # Zwróć JSON z sukcesem
+        return JsonResponse({"success": True, "shoe_id": shoe_id})
     
     return JsonResponse({"error": "Invalid request"}, status=400)
 

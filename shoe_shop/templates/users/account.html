@@ -121,13 +121,15 @@
                                     <p class="card-text">${{ shoe.price }}</p>
                                 </div>
                                 <div class="card-footer bg-white">
-                                    <form method="post" action="{% url 'remove_from_wishlist' %}">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="shoe_id" value="{{ shoe.id }}">
-                                        <button type="submit" class="btn btn-danger btn-sm">
-                                            <i class="fas fa-trash-alt"></i> Remove
-                                        </button>
-                                    </form>
+                                    <div class="card-footer bg-white">
+                                        <form method="post" action="{% url 'remove_from_wishlist' %}" class="remove-wishlist-form">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="shoe_id" value="{{ shoe.id }}">
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <i class="fas fa-trash-alt"></i> Remove
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -181,13 +183,13 @@
 </div>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // 1. Obsługa przełączania sekcji konta
+        // Obsługa przełączania sekcji konta
         const params = new URLSearchParams(window.location.search);
         const section = params.get("section");
         const sections = document.querySelectorAll(".account-main");
-    
+
         sections.forEach(sec => sec.classList.add("hide"));
-    
+
         if (section) {
             const target = document.querySelector("." + section);
             if (target) {
@@ -196,15 +198,24 @@
         } else {
             document.querySelector(".dashboard").classList.remove("hide");
         }
-    
-        // 2. Obsługa usuwania z wishlisty
+
+        // Obsługa usuwania z wishlisty z animacją
         document.querySelectorAll('.remove-wishlist-form').forEach(form => {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
-                
                 const form = this;
-                const productCard = form.closest('.col-xl-3, .col-lg-4, .col-md-6, .col-sm-6, .col-12');
-                
+                const productCard = this.closest('.col-xl-3, .col-lg-4, .col-md-6, .col-sm-6, .col-12');
+
+                // Animacja znikania
+                productCard.style.transition = 'all 0.3s ease';
+                productCard.style.opacity = '0';
+                productCard.style.transform = 'translateX(-100%)';
+                productCard.style.height = '0';
+                productCard.style.margin = '0';
+                productCard.style.padding = '0';
+                productCard.style.overflow = 'hidden';
+
+                // Wyślij żądanie AJAX po rozpoczęciu animacji
                 fetch(form.action, {
                     method: 'POST',
                     body: new FormData(form),
@@ -213,33 +224,23 @@
                         'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value
                     },
                 })
-                .then(response => {
-                    if (response.ok) {
-                        // Animacja znikania
-                        productCard.style.transition = 'opacity 0.3s';
-                        productCard.style.opacity = '0';
-                        
-                        // Usunięcie elementu po animacji
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Po zakończeniu animacji usuń element z DOM
                         setTimeout(() => {
                             productCard.remove();
                             
-                            // Aktualizacja licznika
-                            const wishlistCount = document.querySelector('.wishlist-count');
-                            if (wishlistCount) {
-                                const currentCount = parseInt(wishlistCount.textContent);
-                                wishlistCount.textContent = currentCount - 1;
-                            }
-                            
                             // Jeśli lista jest pusta, pokaż komunikat
-                            const wishlistContainer = document.querySelector('.account-main.wishlist .row');
-                            if (wishlistContainer && wishlistContainer.children.length === 0) {
-                                wishlistContainer.innerHTML = `
+                            if (document.querySelectorAll('.wishlist .col-xl-3').length === 0) {
+                                const emptyMessage = `
                                     <div class="col-12">
                                         <div class="alert alert-info">
                                             Your wishlist is currently empty.
                                         </div>
                                     </div>
                                 `;
+                                document.querySelector('.wishlist .row').innerHTML = emptyMessage;
                             }
                         }, 300);
                     }
@@ -248,5 +249,6 @@
             });
         });
     });
-    </script>
+</script>
+
 {% endblock content %}
